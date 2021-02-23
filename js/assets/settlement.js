@@ -1,6 +1,10 @@
 const settlementTables = {
   alignment: {
-    all: ["LG", "NG", "CG", "LN", "TN", "CN", "LE", "NE", "CE"],
+    all: [
+      "LG", "NG", "CG", 
+      "LN", "TN", "CN", 
+      "LE", "NE", "CE"
+    ],
     good: ["LG", "NG", "CG"],
     neutral: ["LN", "TN", "CN"],
     evil: ["LE", "NE", "CE"]
@@ -17,8 +21,13 @@ const settlementTables = {
   size: ["Thorp", "Hamlet", "Village", "Small town", "Large town", "Small city", "Large city", "Metropolis"],
   baseValue: [50, 200, 500, 1000, 2000, 4000, 8000, 16000],
   purchaseLimit: [500, 1000, 2500, 5000, 10000, 25000, 50000, 100000],
-  spellcasting: ["-", "0th", "1st", "2nd", "3rd", "4th", "5th", "6th"]
+  spellcasting: ["-", "0th", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th"],
 
+  magicItemBySpellcasting: ["-", "-", "-", "-", "-", "1d4", "1d6", "2d4", "3d4", "3d4", "4d4", "4d4", "?", "?"],
+  // offset minor magic items by +4, and medium magic items by +2
 
+  qualities: [1, 1, 2, 2, 3, 4, 5, 6],
+  modifier: [-4, -2, -1, 0, 0, 1, 2, 4],
+  danger: [-10, -5, 0, 0, 5, 5, 10, 10]
 
 }

@@ -2,7 +2,7 @@ import roll from "./rollArray.js";
 
 export default function () {
   const alignment = roll(settlementTables.alignment.all);
-  const index = roll(settlementTables.populationIndex.all);
+  const index = roll(settlementTables.populationIndex.large);
 
   const settlement = {
     alignment: alignment, 
@@ -15,17 +15,21 @@ export default function () {
       law: 0,
       lore: 0,
       society: 0,
+      danger: 0,
+      spellcastingBonus: 0,
+      baseValueBonus: 0,
+      purchaseLimitBonus: 0
     },
+    qualityNumber: settlementTables.qualities[index],
     qualities: [],
+    notes: [],
     baseValue: settlementTables.baseValue[index],
+    baseValueTotal: 0,
     purchaseLimit: settlementTables.purchaseLimit[index],
-    spellcasting: settlementTables.spellcasting[index]
+    purchaseLimitTotal: 0,
+    government: "",
+    magic: "",
   }
-
-  // process qualities, adding to the relevant values. 
-  // Maybe lay it all out first in a modifiers array, 
-  // and transpose it upon the settlement afterwards? 
-  // Check if this is a problem for some of the percentage modifiers.
 
   return settlement;
 }
