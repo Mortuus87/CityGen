@@ -99,21 +99,85 @@ const qualityTables = [
             purchaseLimitBonus: 0,
             notes: []
         },
+     },
+     {
+       name: "Deep Traditions",
+       statistics: {
+           corruption: 0,
+           crime: -2,
+           economy: 0,
+           law: 2,
+           lore: 0,
+           society: -2,
+           danger: 0,
+           spellcastingBonus: 0,
+           baseValueBonus: 0,
+           purchaseLimitBonus: 0,
+           notes: []
+       },
     },
-    // {
-    //     name: "New",
-    //     statistics: {
-    //         corruption: 0,
-    //         crime: 0,
-    //         economy: 0,
-    //         law: 0,
-    //         lore: 0,
-    //         society: 0,
-    //         danger: 0,
-    //         spellcastingBonus: 0,
-    //         baseValueBonus: 0,
-    //         purchaseLimitBonus: 0,
-    //         notes: []
-    //     },
-    // },
+    {
+       name: "Defiant",
+       statistics: {
+           corruption: 0,
+           crime: 0,
+           economy: 0,
+           law: -1,
+           lore: 0,
+           society: 1,
+           danger: 0,
+           spellcastingBonus: 0,
+           baseValueBonus: 0,
+           purchaseLimitBonus: 0,
+           notes: []
+       },
+   },
+   {
+       name: "Holy Site",
+       statistics: {
+           corruption: -2,
+           crime: 0,
+           economy: 0,
+           law: 0,
+           lore: 0,
+           society: 0,
+           danger: 0,
+           spellcastingBonus: 2,
+           baseValueBonus: 0,
+           purchaseLimitBonus: 0,
+           notes: []
+       },
+    },
+    {
+       name: "Insular",
+       statistics: {
+           corruption: 0,
+           crime: -1,
+           economy: 0,
+           law: 1,
+           lore: 0,
+           society: 0,
+           danger: 0,
+           spellcastingBonus: 0,
+           baseValueBonus: 0,
+           purchaseLimitBonus: 0,
+           notes: []
+       },
+   },
+    {
+       name: "New",
+       statistics: {
+           corruption: 0,
+           crime: 0,
+           economy: 0,
+           law: 0,
+           lore: 0,
+           society: 0,
+           danger: 0,
+           spellcastingBonus: 0,
+           baseValueBonus: 0,
+           purchaseLimitBonus: 0,
+           notes: []
+       },
+   },
 ]
