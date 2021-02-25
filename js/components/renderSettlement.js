@@ -7,41 +7,9 @@ export default function (settlement) {
     <div class="card-body">
       <p>${settlement.alignment} - ${settlement.type}</p>
       <p>${settlement.qualities.join(", ")}</p>
-      <table>
-        <tbody>
-          <tr>
-            <th>Corruption</th>
-            <td>${settlement.statistics.corruption}</td>
-          </tr>
-        </tbody>
-          <tr>
-            <th>Crime</th>
-            <td>${settlement.statistics.crime}</td>
-          </tr>
-        </tbody>
-          <tr>
-            <th>Economy</th>
-            <td>${settlement.statistics.economy}</td>
-          </tr>
-        </tbody>
-          <tr>
-            <th>Law</th>
-            <td>${settlement.statistics.law}</td>
-          </tr>
-        </tbody>
-          <tr>
-            <th>Lore</th>
-            <td>${settlement.statistics.lore}</td>
-          </tr>
-        </tbody>
-          <tr>
-            <th>Society</th>
-            <td>${settlement.statistics.society}</td>
-          </tr>
-        </tbody>
-      </table>
-      <p>Danger</p>
-      <p>Government</p>
+      <p>Corruption ${settlement.statistics.corruption}; Crime ${settlement.statistics.crime}; Economy ${settlement.statistics.economy}; Law ${settlement.statistics.law}; Lore ${settlement.statistics.lore}; Society ${settlement.statistics.society}</p>
+      <p>Danger ${settlement.statistics.danger}</p>
+      <p>Government: ${settlement.government}</p>
       <p>Base Value, Purchase Limit, Spellcasting</p>
       <p>Minor items, medium items, major items</p>
     </div>

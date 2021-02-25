@@ -2,14 +2,15 @@ import roll from "./rollArray.js";
 
 export default function () {
   const alignment = roll(settlementTables.alignment.all);
-  const index = roll(settlementTables.populationIndex.all);
-
+  // console.log(alignment);
+  const size = roll(settlementTables.size.all);
+  // console.log(size);
 
   const settlement = {
     alignment: alignment, 
-    size: index[0],
-    population: settlementTables.populationValue[index],
-    type: settlementTables.size[index],
+    size: size,
+    population: settlementTables.populationValue[size],
+    type: settlementTables.sizeLabel[size],
     statistics: {
       corruption: 0,
       crime: 0,
@@ -17,20 +18,20 @@ export default function () {
       law: 0,
       lore: 0,
       society: 0,
-      danger: settlementTables.danger[index],
+      danger: settlementTables.danger[size],
       baseValueBonus: 0,
       purchaseLimitBonus: 0
     },
-    qualityNumber: settlementTables.qualities[index],
+    qualityNumber: settlementTables.qualitiesValue[size],
     qualities: [],
-    modifierNumber: settlementTables.modifier[index],
+    modifierNumber: settlementTables.modifier[size],
     modifiers: [],
     notes: [],
-    spellcasting: index[0],
+    spellcasting: size,
     spellcastingLevel:"",
-    baseValue: settlementTables.baseValue[index],
+    baseValue: settlementTables.baseValue[size],
     baseValueTotal: 0,
-    purchaseLimit: settlementTables.purchaseLimit[index],
+    purchaseLimit: settlementTables.purchaseLimit[size],
     purchaseLimitTotal: 0,
     government: "",
     magicItems: {

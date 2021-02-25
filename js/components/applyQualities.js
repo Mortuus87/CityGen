@@ -1,14 +1,18 @@
 import roll from "./rollArray.js";
 
 export default function (settlement) {
-
     // calculate number of qualities, and roll for them.
-    let qualities = roll(qualityTables, settlement.qualityNumber);
+    let qualities = roll(settlementTables.qualities, settlement.qualityNumber);
+    let government = roll(settlementTables.governments);
 
-    qualities.forEach(quality => {
+    for (let i = 0; i < qualities.length; i++) {
+        const quality = qualities[i];
         applyQuality(settlement, quality);
-    });
+    }
 
+    applyQuality(settlement, government)
+
+    settlement.government = government.name;
     settlement.purchaseLimitTotal = settlement.purchaseLimit + settlement.statistics.purchaseLimitBonus;
     settlement.baseValueTotal = settlement.baseValue + settlement.statistics.baseValueBonus;
     settlement.spellcastingLevel = settlementTables.spellcasting[settlement.spellcasting];
@@ -34,4 +38,5 @@ function applyQuality (settlement, quality) {
     // settlement.spellcasting += quality.statistics.spellcastingBonus;
     settlement.statistics.baseValueBonus += settlement.baseValue * quality.statistics.baseValueBonus
     settlement.statistics.purchaseLimitBonus += settlement.purchaseLimit * quality.statistics.purchaseLimitBonus
+    // console.log(quality);
 }

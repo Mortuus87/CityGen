@@ -4,13 +4,6 @@ import render from "./components/renderSettlement.js";
 
 function init() {
   let settlement = create();
-  // console.log(settlement);
-
-  // let quality = roll(qualityTables);
-  // console.log(quality);
-
-  
-
 
   settlement = applyQualities(settlement); 
   console.log(settlement);
@@ -19,4 +12,4 @@ function init() {
 
 }
 
-init()
+init();
