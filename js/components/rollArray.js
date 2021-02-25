@@ -14,5 +14,6 @@ export default function (qualities, iterations = 1) {
     // console.log(returnArray);
   };
 
+  // console.log(returnArray);
   return returnArray;
 }

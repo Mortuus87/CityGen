@@ -5,21 +5,21 @@ export default function (settlement) {
     // calculate number of qualities, and roll for them.
     let qualities = roll(qualityTables, settlement.qualityNumber);
 
-
     qualities.forEach(quality => {
         applyQuality(settlement, quality);
     });
 
     settlement.purchaseLimitTotal = settlement.purchaseLimit + settlement.statistics.purchaseLimitBonus;
     settlement.baseValueTotal = settlement.baseValue + settlement.statistics.baseValueBonus;
+    settlement.spellcastingLevel = settlementTables.spellcasting[settlement.spellcasting];
+    settlement.magicItems.minor = settlementTables.magicItemBySpellcasting[settlement.size+4];
+    settlement.magicItems.medium = settlementTables.magicItemBySpellcasting[settlement.size+2];
+    settlement.magicItems.major = settlementTables.magicItemBySpellcasting[settlement.size+0];
 
     return settlement;
 }
 
 function applyQuality (settlement, quality) {
-    // console.log(settlement);
-    // console.log(quality);
-
     settlement.qualities.push(quality.name);
     settlement.notes = [...settlement.notes, ...quality.statistics.notes];
     
@@ -30,8 +30,8 @@ function applyQuality (settlement, quality) {
     settlement.statistics.lore += quality.statistics.lore;
     settlement.statistics.society += quality.statistics.society;
     settlement.statistics.danger += quality.statistics.danger;
-    
-    settlement.statistics.spellcastingBonus +=  quality.statistics.spellcastingBonus;
+
+    // settlement.spellcasting += quality.statistics.spellcastingBonus;
     settlement.statistics.baseValueBonus += settlement.baseValue * quality.statistics.baseValueBonus
     settlement.statistics.purchaseLimitBonus += settlement.purchaseLimit * quality.statistics.purchaseLimitBonus
 }

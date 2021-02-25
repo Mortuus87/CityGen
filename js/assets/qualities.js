@@ -1,5 +1,4 @@
-const qualityTables = [
-    {
+const qualityTables = [{
         name: "Academic",
         statistics: {
             corruption: 0,
@@ -117,36 +116,36 @@ const qualityTables = [
         },
     },
     {
-       name: "Defiant",
-       statistics: {
-           corruption: 0,
-           crime: 0,
-           economy: 0,
-           law: -1,
-           lore: 0,
-           society: 1,
-           danger: 0,
-           spellcastingBonus: 0,
-           baseValueBonus: 0,
-           purchaseLimitBonus: 0,
-           notes: []
-       },
-   },
-   {
-       name: "Holy Site",
-       statistics: {
-           corruption: -2,
-           crime: 0,
-           economy: 0,
-           law: 0,
-           lore: 0,
-           society: 0,
-           danger: 0,
-           spellcastingBonus: 2,
-           baseValueBonus: 0,
-           purchaseLimitBonus: 0,
-           notes: []
-       },
+        name: "Defiant",
+        statistics: {
+            corruption: 0,
+            crime: 0,
+            economy: 0,
+            law: -1,
+            lore: 0,
+            society: 1,
+            danger: 0,
+            spellcastingBonus: 0,
+            baseValueBonus: 0,
+            purchaseLimitBonus: 0,
+            notes: []
+        },
+    },
+    {
+        name: "Holy Site",
+        statistics: {
+            corruption: -2,
+            crime: 0,
+            economy: 0,
+            law: 0,
+            lore: 0,
+            society: 0,
+            danger: 0,
+            spellcastingBonus: 2,
+            baseValueBonus: 0,
+            purchaseLimitBonus: 0,
+            notes: []
+        },
     },
     {
         name: "Insular",
