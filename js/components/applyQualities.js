@@ -3,14 +3,17 @@ import roll from "./rollArray.js";
 export default function (settlement) {
     // calculate number of qualities, and roll for them.
     let qualities = roll(settlementTables.qualities, settlement.qualityNumber);
+
     let government = roll(settlementTables.governments);
+    
 
     for (let i = 0; i < qualities.length; i++) {
         const quality = qualities[i];
         applyQuality(settlement, quality);
+        console.log(quality);
     }
-
-    applyQuality(settlement, government)
+    console.log(government);
+    applyGovernment(settlement, government)
 
     settlement.government = government.name;
     settlement.purchaseLimitTotal = settlement.purchaseLimit + settlement.statistics.purchaseLimitBonus;
@@ -36,7 +39,22 @@ function applyQuality (settlement, quality) {
     settlement.statistics.danger += quality.statistics.danger;
 
     // settlement.spellcasting += quality.statistics.spellcastingBonus;
-    settlement.statistics.baseValueBonus += settlement.baseValue * quality.statistics.baseValueBonus
-    settlement.statistics.purchaseLimitBonus += settlement.purchaseLimit * quality.statistics.purchaseLimitBonus
+    settlement.statistics.baseValueBonus += settlement.baseValue * quality.statistics.baseValueBonus;
+    settlement.statistics.purchaseLimitBonus += settlement.purchaseLimit * quality.statistics.purchaseLimitBonus;
     // console.log(quality);
+}
+
+function applyGovernment(settlement, government) {
+    settlement.government = government.name;
+    
+    settlement.statistics.corruption += government.statistics.corruption;
+    settlement.statistics.crime += government.statistics.crime;
+    settlement.statistics.economy += government.statistics.economy;
+    settlement.statistics.law += government.statistics.law;
+    settlement.statistics.lore += government.statistics.lore;
+    settlement.statistics.society += government.statistics.society;
+    settlement.statistics.danger += government.statistics.danger;
+
+    settlement.statistics.baseValueBonus += settlement.baseValue * government.statistics.baseValueBonus;
+    settlement.statistics.purchaseLimitBonus += settlement.purchaseLimit * government.statistics.purchaseLimitBonus;
 }

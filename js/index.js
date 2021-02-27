@@ -8,7 +8,7 @@ function init() {
   settlement = applyQualities(settlement); 
   console.log(settlement);
 
-  document.querySelector(".output").innerHTML = render(settlement);
+  render(settlement);
 
 }
 
