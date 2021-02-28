@@ -1,14 +1,12 @@
-import create from "./components/createSettlement.js";
-import applyQualities from "./components/applyQualities.js";
-import render from "./components/renderSettlement.js";
+import createSettlement from "./components/Settlement.js";
 
 function init() {
-  let settlement = create();
+  let settlement = createSettlement();
+  settlement.process();
+  settlement.render();
 
-  settlement = applyQualities(settlement); 
   console.log(settlement);
 
-  render(settlement);
 
 }
 

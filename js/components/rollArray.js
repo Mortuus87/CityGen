@@ -7,15 +7,13 @@
 export default function (target, iterations = 1) {
   if (Array.isArray(target)) {
     target = shuffle(target);
+    
     let returnArray = [];
 
     for (let i = 0; i < iterations; i++) {
       returnArray.push(target.pop());
     }
     
-    if (iterations <= 1) {
-      return returnArray[0];
-    }
     return returnArray;
   }
 }
