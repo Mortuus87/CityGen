@@ -108,6 +108,10 @@ function Settlement(alignment, size) {
     if (this.spellcasting > settlementTables.spellcastingIndex.length) {
       this.spellcasting = settlementTables.spellcastingIndex.length;
     }
+    if (this.spellcasting < 0) {
+      this.spellcasting = 0;
+    }
+
     this.spellcastingMax = settlementTables.spellcastingIndex[this.spellcasting];
     this.purchaseLimitTotal = this.purchaseLimit + this.purchaseLimitBonus;
     this.baseValueTotal = this.baseValue + this.baseValueBonus;
@@ -122,22 +126,9 @@ function Settlement(alignment, size) {
       <p><b>${this.alignment} ${this.type}</b></p>
       <p><b>Population:</b> ${settlementTables.populationValue[this.size]}</p>
       <p><b>Qualities: </b>${this.qualities.join(", ")}</p>
-      <p>${this.qualityNotes.join("<br>")}</p>
+      <p>${this.qualityNotes.join("<br><br>")}</p>
       <p><b>Government: </b>${this.governments.join(", ")}</p>
-      <p>${this.governmentNotes.join("<br>")}</p>
-    `;
-
-    document.querySelector(".bottom-info").innerHTML = `
-      <p><b>Base value:</b> ${this.baseValueTotal}</p>
-      <p><b>Purchase limit:</b> ${this.purchaseLimitTotal}</p>
-      <p><b>Highest spell level:</b> ${this.spellcastingMax}</p>
-      <p><b>Magic items</b>:
-        <ul>
-          <li>Minor: ${this.minorItems}</li>
-          <li>Medium: ${this.mediumItems}</li>
-          <li>Major: ${this.majorItems}</li>
-        </ul>
-      </p>
+      <p>${this.governmentNotes.join("<br><br>")}</p>
     `;
 
     const corruptionField = document.querySelector("#corruption");
@@ -153,5 +144,18 @@ function Settlement(alignment, size) {
     lawField.value = this.law;
     loreField.value = this.lore;
     societyField.value = this.society;
+
+    document.querySelector(".bottom-info").innerHTML = `
+      <p><b>Base value:</b> ${this.baseValueTotal}</p>
+      <p><b>Purchase limit:</b> ${this.purchaseLimitTotal}</p>
+      <p><b>Highest spell level:</b> ${this.spellcastingMax}</p>
+      <p><b>Magic items</b>:
+        <ul>
+          <li>Minor: ${this.minorItems}</li>
+          <li>Medium: ${this.mediumItems}</li>
+          <li>Major: ${this.majorItems}</li>
+        </ul>
+      </p>
+    `;
   }
 }
