@@ -175,20 +175,6 @@ const settlementTables = {
       purchaseLimitBonus: 0,
       notes: ["The settlement is well known for its culture of artistry, particularly among actors and musicians. It always counts as a prosperous city for the purpose of perform checks."]
     },
-    // {
-    //   name: "Darkvision",
-    //   corruption: 0,
-    //   crime: -1,
-    //   economy: 1,
-    //   law: 0,
-    //   lore: 0,
-    //   society: 0,
-    //   danger: 0,
-    //   spellcastingBonus: 0,
-    //   baseValueBonus: 0,
-    //   purchaseLimitBonus: 0,
-    //   notes: []
-    // },
     {
       name: "Deep Traditions",
       corruption: 0,
@@ -651,6 +637,38 @@ const settlementTables = {
       purchaseLimitBonus: 0,
       notes: ["The settlement possesses some sort of landmark or event that draws visitors from far and wide."]
     }
+    /*
+    Boom Town:
+      Crime +1; Economy +2
+    Counterculture Movement:
+      Corruption and Law -1; Lore and Society +1
+    Financial:
+      Corruption and Law +1; Economy +2; increase base value by 30%; increase purchase limit by 50%
+    Government Capitol:
+      All settlement modifiers +1; increase base value and purchase limit by 10%
+    Hardened:
+      Corruption -2; Crime -2; Society -2; Law +2
+    Industrial:
+      Corruption, Economy, and Lore +1; increase base value by 10%; increase purchase limit by 20%
+    Massive Underground:
+      Crime +2; Society -1; Danger +10
+    Military Presence:
+      Economy and Law +1; increase base value by 10%
+    Monastic Order:
+      Economy +1, Law +1; Society -2
+    On the Shoulders of Giants:
+      Lore +1, Society +1
+    Organized Crime:
+      Corruption, Crime, and Economy +1; Law -2; Danger +10
+    Party Town:
+      Corruption +1; Crime +1 [+3 during major events]; Economy +1; Society +1
+    Rabble Rousers:
+      Corruption +1; Society +1; Economy -1; reduce Base Value and Purchase Limit by 10%
+    Tribal:
+      Society -4, Law +2
+    Under Siege:
+      Economy -1, Society -1, Danger -10
+    */
   ],
 
   governments: [{

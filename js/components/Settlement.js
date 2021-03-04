@@ -96,14 +96,55 @@ function Settlement(alignment, size) {
   }
 
   this.applyAlignment = () => {
-    // TODO
-    // Get modifiers from alignment - switch statement?
+    const a = this.alignment;
+
+    if (a === 'LG' || a === 'LN' || a === 'LE') {
+      this.law++;
+      console.log("adding +1 law");
+    }
+    if (a === 'LG' || a === 'NG' || a === 'CG') {
+      this.society++;
+      console.log("adding +1 society");
+    }
+    if (a === 'CG' || a === 'CN' || a === 'CE') {
+      this.crime++;
+      console.log("adding +1 crime");
+    }
+    if (a === 'LE' || a === 'NE' || a === 'CE') {
+      this.corruption++;
+      console.log("adding +1 corruption");
+    }
+    if (a === 'NG' || a === 'TN' || a === 'NE' || a === 'LN' || a === 'CN') {
+      this.lore++;
+      console.log("adding +1 lore");
+      if (a === 'TN') {
+        this.lore++;
+        console.log("adding +1 law (TN)");
+      }
+    }
+  }
+
+  this.applySize = () => {
+    // console.log(this);
+
+    const size = this.size;
+    const modifier = settlementTables.modifier[size];
+    
+    this.corruption = this.corruption + modifier;
+    this.crime = this.crime + modifier;
+    this.economy = this.economy + modifier;
+    this.law = this.law + modifier;
+    this.lore = this.lore + modifier;
+    this.society = this.society + modifier;
+
+    // console.log(modifier);
   }
 
   this.process = () => {
     this.applyQualities();
     this.applyGovernments();
     this.applyAlignment();
+    this.applySize();
 
     if (this.spellcasting > settlementTables.spellcastingIndex.length) {
       this.spellcasting = settlementTables.spellcastingIndex.length;
@@ -122,40 +163,76 @@ function Settlement(alignment, size) {
   }
 
   this.render = () => {
-    document.querySelector(".top-info").innerHTML = `
-      <p><b>${this.alignment} ${this.type}</b></p>
-      <p><b>Population:</b> ${settlementTables.populationValue[this.size]}</p>
-      <p><b>Qualities: </b>${this.qualities.join(", ")}</p>
-      <p>${this.qualityNotes.join("<br><br>")}</p>
-      <p><b>Government: </b>${this.governments.join(", ")}</p>
-      <p>${this.governmentNotes.join("<br><br>")}</p>
-    `;
+    document.querySelector(".info").innerHTML = `
+      <p>
+        <b>${this.alignment} ${this.type}</b>
+      </p>
+      <p>
+        Corruption ${this.corruption};
+        Crime ${this.crime};
+        Economy ${this.economy};
+        Law ${this.law};
+        Lore ${this.lore};
+        Society ${this.society};
+      </p>
+      <p>
+        <b>Danger:</b> ${this.danger}
+      </p>
+      <p>
+        <b>Qualities:</b> ${this.qualities.join(", ")}
+      </p>
+      <p>
+        ${this.qualityNotes.join("<br><br>")}
+      </p>
 
-    const corruptionField = document.querySelector("#corruption");
-    const crimeField = document.querySelector("#crime");
-    const economyField = document.querySelector("#economy");
-    const lawField = document.querySelector("#law");
-    const loreField = document.querySelector("#lore");
-    const societyField = document.querySelector("#society");
+      <p>
+        <b>Government:</b> ${this.governments.join(", ")}
+      </p>
+      <p>
+        ${this.governmentNotes.join("<br><br>")}
+      </p>
+      <p>
+        <b>Population:</b> ${settlementTables.populationValue[this.size]}
+      </p>
 
-    corruptionField.value = this.corruption;
-    crimeField.value = this.crime;
-    economyField.value = this.economy;
-    lawField.value = this.law;
-    loreField.value = this.lore;
-    societyField.value = this.society;
+      <p>
+        <b>Base value:</b> ${this.baseValueTotal}; 
+        <b>Purchase limit:</b> ${this.purchaseLimitTotal};
+        <b>Highest spell level:</b> ${this.spellcastingMax};
+      </p>
 
-    document.querySelector(".bottom-info").innerHTML = `
-      <p><b>Base value:</b> ${this.baseValueTotal}</p>
-      <p><b>Purchase limit:</b> ${this.purchaseLimitTotal}</p>
-      <p><b>Highest spell level:</b> ${this.spellcastingMax}</p>
-      <p><b>Magic items</b>:
-        <ul>
-          <li>Minor: ${this.minorItems}</li>
-          <li>Medium: ${this.mediumItems}</li>
-          <li>Major: ${this.majorItems}</li>
-        </ul>
+      <p>
+        <b>Minor items</b> ${this.minorItems};
+        <b>Medium items</b> ${this.mediumItems};
+        <b>Major items</b> ${this.majorItems};
       </p>
     `;
+  }
+
+  this.renderWiki = () => {
+    document.querySelector(".template").innerHTML = `
+    {{City
+    |name=City
+    |alignment=${this.alignment}
+    |type=${this.type}
+    |corruption=${this.corruption}
+    |crime=${this.crime}
+    |economy=${this.economy}
+    |law=${this.law}
+    |lore=${this.lore}
+    |society=${this.society}
+    |qualities=${this.qualities.join(", ")}
+    |danger=${this.danger}
+    |government=${this.governments.join(", ")}
+    |population=${this.population}
+    |notable_npcs=
+    |base_val=${this.baseValueTotal}
+    |purchase_limit=${this.purchaseLimitTotal}
+    |spellcasting=${this.spellcastingMax}
+    |minor=${this.minorItems}
+    |medium=${this.mediumItems}
+    |major=${this.majorItems}
+    }}
+    `
   }
 }
