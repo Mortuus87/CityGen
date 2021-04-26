@@ -17,6 +17,16 @@ const settlementTables = {
     large: [6, 7]
   },
 
+  statistics: [
+    "corruption",
+    "crime",
+    "economy",
+    "law",
+    "lore",
+    "society",
+    "danger"
+  ],
+
   populationValue: ["fewer than 51", "51-200", "201-1 000", "1 001 - 5 000", "5 001 - 25 000", "25 001 - 50 000", "50 001 - 250 000", "More than 250 000"],
 
   sizeLabel: ["Thorp", "Hamlet", "Village", "Small Town", "Large Town", "Small City", "Large City", "Metropolis"],
