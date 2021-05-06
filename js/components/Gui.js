@@ -39,7 +39,7 @@ function CityInterface() {
 		html += `</select>`;
 
 		html +=
-			`<div id="quality preview">
+			`<div id="quality-preview">
 		<h2>Get name</h2>
 		<p>settlementTables.qualities[i] where i is the value of the select</p>
 		<p>Add a button with the same id passed to a function that looks up and adds it to a render container</p>
@@ -47,8 +47,8 @@ function CityInterface() {
 
 		<br><br>
 		
-		<div id="qualities output">
-			<div id="quality-id">
+		<div id="qualities-output">
+			<div id="quality">
 				<h3>Quality</h3>
 				<p>Example quality description</p>
 			</div>
@@ -60,17 +60,24 @@ function CityInterface() {
 		return html;
 	}
 	this.fill = (settlement) => {
-		// find and change value of alignment
 		document.querySelector('#alignment [value="'+settlement.alignment+'"]').selected = true;
 		document.querySelector('#size [value="'+settlement.size+'"]').selected = true;
 		
 		for (let i = 0; i < this.t.statistics.length; i++) {
 			const stat = this.t.statistics[i];
-			
 			document.querySelector(`#${stat}-base`).value = settlement[stat];
-			
 		}
-		// find and change value of alignment
+
+		let qualitiesHtml = '';
+		for (let i = 0; i < settlement.qualities.length; i++) {
+			qualitiesHtml += 
+			`
+			<h3>${settlement.qualities[i]}</h3>
+			<p>${settlement.qualityNotes[i]}</p>
+			`;
+		}
+		document.querySelector(`#qualities-output`).innerHTML = qualitiesHtml;
+
 
 	}
 }
