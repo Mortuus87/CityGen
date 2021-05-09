@@ -17,14 +17,14 @@ const settlementTables = {
     large: [6, 7]
   },
 
-  statistics: [
-    "corruption",
-    "crime",
-    "economy",
-    "law",
-    "lore",
-    "society"
-  ],
+  // statistics: [
+  //   "corruption",
+  //   "crime",
+  //   "economy",
+  //   "law",
+  //   "lore",
+  //   "society"
+  // ],
 
   populationValue: ["fewer than 51", "51-200", "201-1 000", "1 001 - 5 000", "5 001 - 25 000", "25 001 - 50 000", "50 001 - 250 000", "More than 250 000"],
 
@@ -734,7 +734,7 @@ const settlementTables = {
       spellcastingBonus: 1,
       baseValueBonus: 0,
       purchaseLimitBonus: 0,
-      notes: ["An individual or group with potent magical power, such as A high priest, an archwizard, or even a magical monster, leads the community."]
+      notes: ["An individual or group with potent magical power, such as a high priest, an archwizard, or even a magical monster, leads the community."]
     },
     {
       name: "Overlord/King/Warlord",
