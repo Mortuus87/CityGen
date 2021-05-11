@@ -1,13 +1,13 @@
 import roll from "./rollArray.js";
 
-export default function (size, alignment, table) {
-  return new Settlement(size, alignment, table)
+export default function (table) {
+  return new Settlement(table)
 }
 
 class Settlement {
   constructor(
-    size = roll(settlementTables.size['all'])[0], 
-    alignment = roll(settlementTables.alignment['all'])[0], 
+    size = roll(settlementTables.size)[0], 
+    alignment = roll(settlementTables.alignment)[0], 
     table = settlementTables
   ) {
     
@@ -102,48 +102,51 @@ class Settlement {
 
       if (a === 'LG' || a === 'LN' || a === 'LE') {
         this.law++;
-        console.log("adding +1 law");
+        // console.log("adding +1 law");
       }
       if (a === 'LG' || a === 'NG' || a === 'CG') {
         this.society++;
-        console.log("adding +1 society");
+        // console.log("adding +1 society");
       }
       if (a === 'CG' || a === 'CN' || a === 'CE') {
         this.crime++;
-        console.log("adding +1 crime");
+        // console.log("adding +1 crime");
       }
       if (a === 'LE' || a === 'NE' || a === 'CE') {
         this.corruption++;
-        console.log("adding +1 corruption");
+        // console.log("adding +1 corruption");
       }
       if (a === 'NG' || a === 'TN' || a === 'NE' || a === 'LN' || a === 'CN') {
         this.lore++;
-        console.log("adding +1 lore");
+        // console.log("adding +1 lore");
         if (a === 'TN') {
           this.lore++;
-          console.log("adding +1 law (TN)");
+          // console.log("adding +1 lore (TN)");
         }
       }
     }
 
     this.applySize = () => {
-      const size = this.size;
-      const modifier = this.table.modifier[size];
+      this.population = this.table.populationValue[this.size];
+      this.type = this.table.sizeLabel[this.size];
+      
+      this.modifierNumber = this.table.modifier[this.size];
 
-      this.corruption = this.corruption + modifier;
-      this.crime = this.crime + modifier;
-      this.economy = this.economy + modifier;
-      this.law = this.law + modifier;
-      this.lore = this.lore + modifier;
-      this.society = this.society + modifier;
+      this.corruption = this.corruption + this.modifierNumber;
+      this.crime = this.crime + this.modifierNumber;
+      this.economy = this.economy + this.modifierNumber;
+      this.law = this.law + this.modifierNumber;
+      this.lore = this.lore + this.modifierNumber;
+      this.society = this.society + this.modifierNumber;
+
+      this.danger = this.table.danger[this.size];
+      this.qualityNumber = this.table.qualitiesValue[this.size];
+      this.baseValue = this.table.baseValue[this.size];
+      this.purchaseLimit = this.table.purchaseLimit[this.size];
+      this.spellcasting = this.size;
     }
 
-    this.process = () => {
-      this.applyQualities();
-      this.applyGovernments();
-      this.applyAlignment();
-      this.applySize();
-
+    this.applySpells = () => {
       if (this.spellcasting > this.table.spellcastingIndex.length) {
         this.spellcasting = this.table.spellcastingIndex.length;
       }
@@ -159,6 +162,14 @@ class Settlement {
       this.minorItems = this.table.magicItemsBySpellcasting[this.size + 4];
       this.mediumItems = this.table.magicItemsBySpellcasting[this.size + 2];
       this.majorItems = this.table.magicItemsBySpellcasting[this.size + 0];
+    }
+
+    this.process = () => {
+      this.applyQualities();
+      this.applyGovernments();
+      this.applyAlignment();
+      this.applySize();
+      this.applySpells();
     }
 
     this.render = (selector = document.querySelector(".info")) => {
@@ -211,30 +222,46 @@ class Settlement {
 
     this.renderWiki = (selector = document.querySelector(".template")) => {
       selector.innerHTML = 
-      `
-      {{City
-        |name=City
-        |alignment=${this.alignment}
-        |type=${this.type}
-        |corruption=${this.corruption}
-        |crime=${this.crime}
-        |economy=${this.economy}
-        |law=${this.law}
-        |lore=${this.lore}
-        |society=${this.society}
-        |qualities=${this.qualities.join(", ")}
-        |danger=${this.danger}
-        |government=${this.governments.join(", ")}
-        |population=${this.population}
-        |notable_npcs=
-        |base_val=${this.baseValueTotal}
-        |purchase_limit=${this.purchaseLimitTotal}
-        |spellcasting=${this.spellcastingMax}
-        |minor=${this.minorItems}
-        |medium=${this.mediumItems}
-        |major=${this.majorItems}
-      }}
-      `
+`{{City
+  |name=City
+  |alignment=${this.alignment}
+  |type=${this.type}
+  |corruption=${this.corruption}
+  |crime=${this.crime}
+  |economy=${this.economy}
+  |law=${this.law}
+  |lore=${this.lore}
+  |society=${this.society}
+  |qualities=[[Settlements#${this.qualities.join("]], [[Settlements#")}]]
+  |danger=${this.danger}
+  |government=${this.governments.join(", ")}
+  |population=${this.population}
+  |notable_npcs=
+  |base_val=${this.baseValueTotal}
+  |purchase_limit=${this.purchaseLimitTotal}
+  |spellcasting=${this.spellcastingMax}
+  |minor=${this.minorItems}
+  |medium=${this.mediumItems}
+  |major=${this.majorItems}
+}}`;
+    }
+
+    this.setSize = (size) => {
+      size = parseInt(size);
+      this.size = size;
+
+    };
+
+    this.getSize = () => {
+      return this.size;
+    }
+
+    this.setAlignment = (alignment) => {
+      this.alignment = alignment;
+    };
+
+    this.getAlignment = () => {
+      return this.alignment;
     }
   }
 }

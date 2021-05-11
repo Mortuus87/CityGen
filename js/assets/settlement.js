@@ -1,21 +1,11 @@
 const settlementTables = {
-  alignment: {
-    all: [
+  alignment: [
       "LG", "NG", "CG",
       "LN", "TN", "CN",
       "LE", "NE", "CE"
     ],
-    good: ["LG", "NG", "CG"],
-    neutral: ["LN", "TN", "CN"],
-    evil: ["LE", "NE", "CE"]
-  },
 
-  size: {
-    all: [0, 1, 2, 3, 4, 5, 6, 7],
-    small: [0, 1, 2],
-    medium: [3, 4, 5],
-    large: [6, 7]
-  },
+  size: [0, 1, 2, 3, 4, 5, 6, 7],
 
   // statistics: [
   //   "corruption",
@@ -681,7 +671,7 @@ const settlementTables = {
   ],
 
   governments: [{
-      name: "Authocracy/Governor/Mayor",
+      name: "Authocracy",
       corruption: 0,
       crime: 0,
       economy: 0,
@@ -692,7 +682,7 @@ const settlementTables = {
       spellcastingBonus: 0,
       baseValueBonus: 0,
       purchaseLimitBonus: 0,
-      notes: ["A single individual chosen by the people rules the community. This leader’s actual title can vary—mayor, burgomaster, lord, or even royal titles like duke or prince are common."]
+      notes: ["A single individual chosen by the people rules the community. This leader’s actual title can vary — mayor, burgomaster, lord, or even royal titles like duke or prince are common."]
     },
     {
       name: "Council/Parliament",
@@ -748,7 +738,7 @@ const settlementTables = {
       spellcastingBonus: 0,
       baseValueBonus: 0,
       purchaseLimitBonus: 0,
-      notes: ["The community’s ruler is a single individual who either seized control or inherited command of the settlement."]
+      notes: ["The community’s ruler is a single individual who either seized control or inherited command of the settlement. This individual is mostly unaccountable to anyone."]
     },
     {
       name: "Secret Syndicate",
