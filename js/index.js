@@ -28,7 +28,7 @@ function update() {
 
   settlement.process();
   settlement.render();
-  // settlement.renderWiki();
+  settlement.renderWiki();
   // console.log(settlement);
 }
 

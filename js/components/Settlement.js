@@ -15,8 +15,8 @@ class Settlement {
     this.alignment = alignment;
     this.table = table;
 
-    this.population = this.table.populationValue[size];
-    this.type = this.table.sizeLabel[size];
+    // this.population = this.table.populationValue[size];
+    // this.type = this.table.sizeLabel[size];
 
     this.corruption = 0;
     this.crime = 0;
@@ -25,31 +25,31 @@ class Settlement {
     this.lore = 0;
     this.society = 0;
 
-    this.danger = this.table.danger[size];
+    // this.danger = this.table.danger[size];
     this.baseValueBonus = 0;
     this.purchaseLimitBonus = 0;
 
-    this.qualityNumber = this.table.qualitiesValue[size];
+    // this.qualityNumber = this.table.qualitiesValue[size];
     this.qualities = [];
     this.qualityNotes = [];
 
     this.governments = [];
     this.governmentNotes = [];
 
-    this.modifierNumber = this.table.modifier[size];
+    // this.modifierNumber = this.table.modifier[size];
     this.modifiers = [];
 
     this.minorItems = "";
     this.mediumItems = "";
     this.majorItems = "";
 
-    this.baseValue = this.table.baseValue[size];
+    // this.baseValue = this.table.baseValue[size];
     this.baseValueTotal = 0;
-    this.purchaseLimit = this.table.purchaseLimit[size];
+    // this.purchaseLimit = this.table.purchaseLimit[size];
     this.purchaseLimitTotal = 0;
 
-    this.spellcasting = size;
-    this.spellcastingMax = "-";
+    // this.spellcasting = size;
+    // this.spellcastingMax = "-";
 
     this.applyQualities = () => {
       const qualities = roll(this.table.qualities, this.qualityNumber);
@@ -75,6 +75,7 @@ class Settlement {
     }
 
     this.applyGovernments = () => {
+      // console.log('applying government', this.size);
       const governments = roll(this.table.governments);
 
       for (let i = 0; i < governments.length; i++) {
@@ -95,9 +96,11 @@ class Settlement {
         this.baseValueBonus += this.baseValue * government.baseValueBonus;
         this.purchaseLimitBonus += this.purchaseLimit * government.purchaseLimitBonus;
       }
+      // console.log('done applying government');
     }
 
     this.applyAlignment = () => {
+      // console.log('applying alignment', this.alignment);
       const a = this.alignment;
 
       if (a === 'LG' || a === 'LN' || a === 'LE') {
@@ -124,9 +127,11 @@ class Settlement {
           // console.log("adding +1 lore (TN)");
         }
       }
+      // console.log('done applying alignment');
     }
 
     this.applySize = () => {
+      // console.log('applying size', this.size);
       this.population = this.table.populationValue[this.size];
       this.type = this.table.sizeLabel[this.size];
       
@@ -144,6 +149,7 @@ class Settlement {
       this.baseValue = this.table.baseValue[this.size];
       this.purchaseLimit = this.table.purchaseLimit[this.size];
       this.spellcasting = this.size;
+      // console.log('done applying size');
     }
 
     this.applySpells = () => {
@@ -165,10 +171,10 @@ class Settlement {
     }
 
     this.process = () => {
+      this.applySize();
+      this.applyAlignment();
       this.applyQualities();
       this.applyGovernments();
-      this.applyAlignment();
-      this.applySize();
       this.applySpells();
     }
 
