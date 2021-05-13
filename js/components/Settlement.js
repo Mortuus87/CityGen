@@ -34,6 +34,7 @@ class Settlement {
     this.qualityNotes = [];
 
     this.governments = [];
+    this.qualityNames = [];
     this.governmentNotes = [];
 
     // this.modifierNumber = this.table.modifier[size];
@@ -57,8 +58,9 @@ class Settlement {
       for (let i = 0; i < qualities.length; i++) {
         const quality = qualities[i];
 
-        this.qualities.push(quality.name);
-        this.qualityNotes = [...this.qualityNotes, ...quality.notes]
+        this.qualities.push(quality);
+        this.qualityNames.push(quality.name)
+        this.qualityNotes = [...this.qualityNotes, ...quality.notes];
 
         this.corruption += quality.corruption;
         this.crime += quality.crime;
@@ -179,14 +181,43 @@ class Settlement {
     }
 
     this.render = (selector = document.querySelector(".info")) => {
+
+      // Qualities text
       let qualityText = '';
+      let qualitiesWikiLinks = '';
       for (let i = 0; i < this.qualities.length; i++) {
         const quality = this.qualities[i];
-        qualityText += `<b>${quality}</b>`;
-        qualityText += `<p>${this.qualityNotes[i]}</p>`;
-      }
+        qualityText += `<b>${quality.name}</b>`;
+        qualityText += `<br>${this.qualityNotes[i]}`;
+        qualitiesWikiLinks += `[[Settlements#${quality.name}|${quality.name}]]`;
+        if (i != this.qualities.length) {
+          qualitiesWikiLinks += ', ';
+        }
+        
+        let statsArray = [];
+        for (let j = 0; j < this.table.statistics.length; j++) {
+          const stat = this.table.statistics[j];
+          statsArray[j] = quality[stat];
+        }
 
-      selector.innerHTML = `
+        if (statsArray.length > 0) {
+          let html = '<br>';
+          statsArray[0] ? html += `<b>Corruption:</b> ${statsArray[0]}; `: '';
+          statsArray[1] ? html += `<b>Crime:</b> ${statsArray[1]}; `: '';
+          statsArray[2] ? html += `<b>Economy:</b> ${statsArray[2]}; `: '';
+          statsArray[3] ? html += `<b>Law:</b> ${statsArray[3]}; `: '';
+          statsArray[4] ? html += `<b>Lore:</b> ${statsArray[4]}; `: '';
+          statsArray[5] ? html += `<b>Society:</b> ${statsArray[5]}; `: '';
+          statsArray[6] ? html += `<b>Danger:</b> ${statsArray[6]}; `: '';
+          statsArray[7] ? html += `<b>Spellcasting:</b> ${statsArray[7]} level; `: '';
+          statsArray[8] ? html += `<b>Base Value:</b> x${statsArray[8]}; `: '';
+          statsArray[9] ? html += `<b>Purchase Limit:</b> x${statsArray[9]}; `: '';
+          qualityText += html;
+          qualityText += '<br><br>';
+        }
+      }
+ 
+      let html = `
       <p>
         <b>${this.alignment} ${this.type}</b>
       </p>
@@ -205,14 +236,16 @@ class Settlement {
         <b>Danger:</b> ${this.danger}
       </p>
       <p>
-        <b>Qualities:</b> ${this.qualities.join(", ")}
+        <b>Qualities:</b> ${this.qualityNames.join(", ")}
       </p>
+      <p>
         ${qualityText}
+      </p>
       <p>
         <b>Government:</b> ${this.governments.join(", ")}
       </p>
       <p>
-        ${this.governmentNotes.join("<br><br>")}
+        ${this.governmentNotes.join("")}
       </p>
       <p>
         <b>Base value:</b> ${this.baseValueTotal}; 
@@ -224,7 +257,11 @@ class Settlement {
         <b>Medium items</b> ${this.mediumItems};
         <b>Major items</b> ${this.majorItems};
       </p>`;
+
+      selector.innerHTML = html;
+      this.qualitiesWikiLinks = qualitiesWikiLinks;
     }
+
 
     this.renderWiki = (selector = document.querySelector(".template")) => {
       selector.innerHTML = 
@@ -238,7 +275,7 @@ class Settlement {
   |law=${this.law}
   |lore=${this.lore}
   |society=${this.society}
-  |qualities=[[Settlements#${this.qualities.join("]], [[Settlements#")}]]
+  |qualities=${this.qualitiesWikiLinks}
   |danger=${this.danger}
   |government=${this.governments.join(", ")}
   |population=${this.population}

@@ -29,7 +29,7 @@ function update() {
   settlement.process();
   settlement.render();
   settlement.renderWiki();
-  // console.log(settlement);
+  console.log(settlement);
 }
 
 init();
