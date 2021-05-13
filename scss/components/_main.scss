@@ -1,0 +1,26 @@
+.statistics {
+  position: relative;
+}
+.statistic {
+  display: inline;
+
+  .popper {
+    &:hover,
+    &:focus {
+      &+.popup {
+        display: block;
+        position: absolute;
+        background-color: white;
+        border: 1px solid gray;
+        z-index: 1;
+        padding: 6px 8px 8px;
+        border-radius: 4px;
+        // width: 100%;
+      }
+    }
+    &+.popup {
+      display: none;
+      margin-right: 20px;
+    }
+  }
+}
