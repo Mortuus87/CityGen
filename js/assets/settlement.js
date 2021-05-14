@@ -95,6 +95,34 @@ const settlementTables = {
       notes: ["Proximity to a famous adventuring location has long drawn curious adventures from across the land."]
     },
     {
+      name: "Ambassadorial",
+      corruption: 0,
+      crime: 1,
+      economy: 0,
+      law: -1,
+      lore: 0,
+      society: 1,
+      danger: 0,
+      spellcastingBonus: 0,
+      baseValueBonus: 0,
+      purchaseLimitBonus: 0,
+      notes: ["The city is the location for an embassy between two or more nations, making it a hotspot for political intrigue and the occasional assassination attempt."]
+    },
+    {
+      name: "Arena",
+      corruption: 0,
+      crime: 1,
+      economy: 1,
+      law: 0,
+      lore: 0,
+      society: 0,
+      danger: 0,
+      spellcastingBonus: 0,
+      baseValueBonus: 0,
+      purchaseLimitBonus: 0,
+      notes: ["The settlement sports an arena of some sort, which opens up opportunities for commerce, but also for criminal activities. The exact form of the arena may vary, from a colosseum in a large city, a cock fighting ring in a thorp, or something in between."]
+    },
+    {
       name: "Artifact Gatherer",
       corruption: 0,
       crime: 0,
@@ -123,7 +151,7 @@ const settlementTables = {
       notes: ["The settlement is renowned for the excellence of its local artists, performers and craftsfolk. Add the settlement’s Economy modifier on all Craft checks, not just those made to earn a living."]
     },
     {
-      name: "Asylum/Sanatorium",
+      name: "Asylum",
       corruption: 0,
       crime: 0,
       economy: 0,
@@ -263,7 +291,7 @@ const settlementTables = {
       notes: ["The settlement caters to vice and greed. Casinos, gaming houses, opium dens and bordellos are all common here, and serve as the town’s major industry."]
     },
     {
-      name: "Good Roads/Railroad Hub",
+      name: "Good Roads",
       corruption: 0,
       crime: 0,
       economy: 2,
@@ -330,7 +358,7 @@ const settlementTables = {
       spellcastingBonus: 2,
       baseValueBonus: .2,
       purchaseLimitBonus: .2,
-      notes: ["The settlement is a haven for spellcasters due to its location; for example, it may lie at the convergence of multiple ley lines or near a well-known magical site."]
+      notes: ["The settlement is a haven for spellcasters due to its location. It may lie at the convergence of multiple ley lines or near a well-known magical site."]
     },
     {
       name: "Majestic",
@@ -639,6 +667,20 @@ const settlementTables = {
       baseValueBonus: .2,
       purchaseLimitBonus: 0,
       notes: ["The settlement possesses some sort of landmark or event that draws visitors from far and wide."]
+    },
+    {
+      name: "Well Illuminated",
+      corruption: 0,
+      crime: -1,
+      economy: 1,
+      law: 0,
+      lore: 0,
+      society: 0,
+      danger: 0,
+      spellcastingBonus: 0,
+      baseValueBonus: 0,
+      purchaseLimitBonus: 0,
+      notes: ["The citizens have the benefit of well illuminated streets and city squares, and thus fewer shadows that provide cover for thieves and other criminals. Merchants lose little inventory to dishonesty."]
     }
     /*
     Boom Town:

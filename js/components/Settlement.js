@@ -50,7 +50,7 @@ class Settlement {
     this.purchaseLimitTotal = 0;
 
     // this.spellcasting = size;
-    // this.spellcastingMax = "-";
+    this.spellcastingMax = "-";
 
     this.applyQualities = () => {
       const qualities = roll(this.table.qualities, this.qualityNumber);
@@ -183,7 +183,7 @@ class Settlement {
     this.render = (selector = document.querySelector(".info")) => {
 
       // Qualities text
-      let qualityText = '';
+      let qualityText = '<p>';
       let qualitiesWikiLinks = '';
       for (let i = 0; i < this.qualities.length; i++) {
         const quality = this.qualities[i];
@@ -213,13 +213,11 @@ class Settlement {
           statsArray[8] ? html += `<b>Base Value:</b> x${statsArray[8]}; `: '';
           statsArray[9] ? html += `<b>Purchase Limit:</b> x${statsArray[9]}; `: '';
           qualityText += html;
-          qualityText += '<br><br>';
+          qualityText += '<br></p>';
         }
       }
  
-      let html = `
-      <p>
-        
+      let html = `<p>
         <div class="statistic">
           <span class="popper"><b>${this.alignment}</b></span>
           <span class="popup"><p>A settlement’s alignment not only describes the community’s general personality and attitude, but also influences its modifiers.</p>
@@ -230,7 +228,7 @@ class Settlement {
             <li>An evil component increases its corruption modifier by 1.</li>
             <li>A neutral component increases its lore modifier by 1 (a truly neutral city gains an increase of 2 to its lore modifier).</li>
           </ul>
-          <p>Alignment never modifies a settlement’s economy modifier.</p></span> 
+          <p>Alignment never modifies a settlement’s economy modifier.</p></div> 
         </div> <b>${this.type}</b>
         
       </p>
@@ -273,9 +271,7 @@ class Settlement {
       <p>
         <b>Qualities:</b> ${this.qualityNames.join(", ")}
       </p>
-      <p>
-        ${qualityText}
-      </p>
+      ${qualityText}
       <p>
         <b>Government:</b> ${this.governments.join(", ")}
       </p>
