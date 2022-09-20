@@ -4,6 +4,7 @@ export default function (table) {
 
 class Qualities {
   constructor(table = settlementTables) {
+    this.table = table;
     this.qualities = table.qualities
     this.print = () => {
       let html = '';
@@ -11,37 +12,25 @@ class Qualities {
         html += `=== ${quality.name} ===<br>`;
         html += `${quality.notes}<br><br>`;
 
-        let stats = [
-          'corruption',
-          'crime',
-          'economy',
-          'law',
-          'lore',
-          'society',
-          'danger',
-          'spellcastingBonus',
-          'baseValueBonus',
-          'purchaseLimitBonus'
-        ];
-
         html += `'''Modifier(s):''' `;
-        stats.forEach(stat => {
+        this.table.statistics.forEach(stat => {
           if (quality[stat] != 0) {
             quality[stat] = quality[stat] <= 0 ? quality[stat] : '+'+quality[stat]
             switch (stat) {
               case 'spellcastingBonus':
-                html += 'Spellcasting ' + quality[stat] + '; '
+                html += 'Spellcasting';
                 break;
               case 'baseValueBonus':
-                html += 'Base value ' + quality[stat] + '; '
+                html += 'Base value';
                 break;
               case 'purchaseLimitBonus':
-                html += 'Purchase limit ' + quality[stat] + '; '
+                html += 'Purchase limit';
                 break;
               default:
-                html += stat.charAt(0).toUpperCase() + stat.slice(1) + ' ' + quality[stat] + '; '
+                html += stat.charAt(0).toUpperCase() + stat.slice(1);
                 break;
-            }  
+            }
+            html += ': ' + quality[stat] + '; '
           }
         });
         html += `<br><br>`;

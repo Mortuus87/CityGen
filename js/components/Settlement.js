@@ -6,11 +6,11 @@ export default function (table) {
 
 class Settlement {
   constructor(
-    size = roll(settlementTables.size)[0], 
-    alignment = roll(settlementTables.alignment)[0], 
+    size = roll(settlementTables.size)[0],
+    alignment = roll(settlementTables.alignment)[0],
     table = settlementTables
   ) {
-    
+
     this.size = size;
     this.alignment = alignment;
     this.table = table;
@@ -30,19 +30,20 @@ class Settlement {
     this.purchaseLimitBonus = 0;
 
     // this.qualityNumber = this.table.qualitiesValue[size];
-    this.qualities = [];
+    this.qualities    = [];
+    this.qualityNames = [];
     this.qualityNotes = [];
 
-    this.governments = [];
-    this.qualityNames = [];
+    this.governments     = [];
+    this.governmentNames = [];
     this.governmentNotes = [];
 
     // this.modifierNumber = this.table.modifier[size];
     this.modifiers = [];
 
-    this.minorItems = "";
+    this.minorItems  = "";
     this.mediumItems = "";
-    this.majorItems = "";
+    this.majorItems  = "";
 
     // this.baseValue = this.table.baseValue[size];
     this.baseValueTotal = 0;
@@ -77,13 +78,13 @@ class Settlement {
     }
 
     this.applyGovernments = () => {
-      // console.log('applying government', this.size);
       const governments = roll(this.table.governments);
 
       for (let i = 0; i < governments.length; i++) {
         const government = governments[i];
 
-        this.governments.push(government.name);
+        this.governments.push(government);
+        this.governmentNames.push(government.name);
         this.governmentNotes = [...this.governmentNotes, ...government.notes]
 
         this.corruption += government.corruption;
@@ -98,45 +99,35 @@ class Settlement {
         this.baseValueBonus += this.baseValue * government.baseValueBonus;
         this.purchaseLimitBonus += this.purchaseLimit * government.purchaseLimitBonus;
       }
-      // console.log('done applying government');
     }
 
     this.applyAlignment = () => {
-      // console.log('applying alignment', this.alignment);
       const a = this.alignment;
 
       if (a === 'LG' || a === 'LN' || a === 'LE') {
         this.law++;
-        // console.log("adding +1 law");
       }
       if (a === 'LG' || a === 'NG' || a === 'CG') {
         this.society++;
-        // console.log("adding +1 society");
       }
       if (a === 'CG' || a === 'CN' || a === 'CE') {
         this.crime++;
-        // console.log("adding +1 crime");
       }
       if (a === 'LE' || a === 'NE' || a === 'CE') {
         this.corruption++;
-        // console.log("adding +1 corruption");
       }
       if (a === 'NG' || a === 'TN' || a === 'NE' || a === 'LN' || a === 'CN') {
         this.lore++;
-        // console.log("adding +1 lore");
         if (a === 'TN') {
           this.lore++;
-          // console.log("adding +1 lore (TN)");
         }
       }
-      // console.log('done applying alignment');
     }
 
     this.applySize = () => {
-      // console.log('applying size', this.size);
       this.population = this.table.populationValue[this.size];
       this.type = this.table.sizeLabel[this.size];
-      
+
       this.modifierNumber = this.table.modifier[this.size];
 
       this.corruption = this.corruption + this.modifierNumber;
@@ -151,7 +142,6 @@ class Settlement {
       this.baseValue = this.table.baseValue[this.size];
       this.purchaseLimit = this.table.purchaseLimit[this.size];
       this.spellcasting = this.size;
-      // console.log('done applying size');
     }
 
     this.applySpells = () => {
@@ -183,40 +173,17 @@ class Settlement {
     this.render = (selector = document.querySelector(".info")) => {
 
       // Qualities text
-      let qualityText = '<p>';
+      // let qualityText = '<p>';
       let qualitiesWikiLinks = '';
+      // let qualitiesWikiEntries = '';
       for (let i = 0; i < this.qualities.length; i++) {
         const quality = this.qualities[i];
-        qualityText += `<b>${quality.name}</b>`;
-        qualityText += `<br>${this.qualityNotes[i]}`;
-        qualitiesWikiLinks += `[[Settlements#${quality.name}|${quality.name}]]`;
+        qualitiesWikiLinks += `[[#${quality.name}|${quality.name}]]`;
         if (i != this.qualities.length) {
           qualitiesWikiLinks += ', ';
         }
-        
-        let statsArray = [];
-        for (let j = 0; j < this.table.statistics.length; j++) {
-          const stat = this.table.statistics[j];
-          statsArray[j] = quality[stat];
-        }
-
-        if (statsArray.length > 0) {
-          let html = '<br>';
-          statsArray[0] ? html += `<b>Corruption:</b> ${statsArray[0]}; `: '';
-          statsArray[1] ? html += `<b>Crime:</b> ${statsArray[1]}; `: '';
-          statsArray[2] ? html += `<b>Economy:</b> ${statsArray[2]}; `: '';
-          statsArray[3] ? html += `<b>Law:</b> ${statsArray[3]}; `: '';
-          statsArray[4] ? html += `<b>Lore:</b> ${statsArray[4]}; `: '';
-          statsArray[5] ? html += `<b>Society:</b> ${statsArray[5]}; `: '';
-          statsArray[6] ? html += `<b>Danger:</b> ${statsArray[6]}; `: '';
-          statsArray[7] ? html += `<b>Spellcasting:</b> ${statsArray[7]} level(s); `: '';
-          statsArray[8] ? html += `<b>Base Value:</b> x${statsArray[8]}; `: '';
-          statsArray[9] ? html += `<b>Purchase Limit:</b> x${statsArray[9]}; `: '';
-          qualityText += html;
-          qualityText += '<br></p>';
-        }
       }
- 
+    
       let html = `<p>
         <div class="statistic">
           <span class="popper"><b>${this.alignment}</b></span>
@@ -268,16 +235,17 @@ class Settlement {
           <span class="popup">A settlement’s danger value is a number that gives a general idea of how dangerous it is to live in the settlement. A settlement’s base danger value depends on its type.</span> 
         </div>
       </p>
-      <p>
-        <b>Qualities:</b> ${this.qualityNames.join(", ")}
-      </p>
-      ${qualityText}
-      <p>
-        <b>Government:</b> ${this.governments.join(", ")}
-      </p>
-      <p>
-        ${this.governmentNotes.join("")}
-      </p>
+
+      <hr>
+      <p><b>Qualities:</b> ${this.qualityNames.join(", ")}</p>
+
+      ${this.printModifiers(this.qualities)}
+
+      <hr>
+      <p><b>Government:</b> ${this.governmentNames.join(", ")}</p>
+
+      ${this.printModifiers(this.governments)}
+
       <p>
         <b>Base value:</b> ${this.baseValueTotal}; 
         <b>Purchase limit:</b> ${this.purchaseLimitTotal};
@@ -295,40 +263,26 @@ class Settlement {
 
 
     this.renderWiki = (selector = document.querySelector(".template")) => {
-      selector.innerHTML = 
-`{{City
-  |name=City
-  |alignment=${this.alignment}
-  |type=${this.type}
-  |corruption=${this.corruption}
-  |crime=${this.crime}
-  |economy=${this.economy}
-  |law=${this.law}
-  |lore=${this.lore}
-  |society=${this.society}
-  |qualities=${this.qualitiesWikiLinks}
-  |danger=${this.danger}
-  |government=${this.governments.join(", ")}
-  |population=${this.population}
-  |notable_npcs=
-  |base_val=${this.baseValueTotal}
-  |purchase_limit=${this.purchaseLimitTotal}
-  |spellcasting=${this.spellcastingMax}
-  |minor=${this.minorItems}
-  |medium=${this.mediumItems}
-  |major=${this.majorItems}
-}}`;
+      selector.innerHTML =
+        `{{City |name=City |alignment=${this.alignment} |type=${this.type} |corruption=${this.corruption} |crime=${this.crime} |economy=${this.economy} |law=${this.law} |lore=${this.lore} |society=${this.society} |qualities=${this.qualitiesWikiLinks} |danger=${this.danger} |government=${this.governmentNames.join(", ")} |population=${this.population} |notable_npcs= |base_val=${this.baseValueTotal} |purchase_limit=${this.purchaseLimitTotal} |spellcasting=${this.spellcastingMax} |minor=${this.minorItems} |medium=${this.mediumItems} |major=${this.majorItems}}}
+        <div>
+          <p>== Qualities ==</p>
+          ${this.printModifiers(this.qualities, true)}
+        </div>
+        <div>
+          <p>== Government ==</p>
+          ${this.printModifiers(this.governments, true)}
+        </div>`;
     }
 
     this.setSize = (size) => {
       size = parseInt(size);
       this.size = size;
-
     };
 
     this.getSize = () => {
       return this.size;
-    }
+    };
 
     this.setAlignment = (alignment) => {
       this.alignment = alignment;
@@ -336,6 +290,60 @@ class Settlement {
 
     this.getAlignment = () => {
       return this.alignment;
+    };
+
+    this.printModifiers = (qualities, wikiMode = false) => {
+      let html = '';
+
+      if (wikiMode) {
+        html += ``;
+      } else {
+        html += ``;
+      }
+
+      qualities.forEach(quality => {
+        html += `<div class="quality">`;
+        if (wikiMode) {
+          html += `=== ${quality.name} ===<br>`;
+          html += `${quality.notes}<br>`;
+          html += `<br>`;
+          html += `'''Modifier(s):''' `;
+        } else {
+          html += `<b>${quality.name}</b>`;
+          html += `<br>${quality.notes}`;
+          html += `<br>`;
+          html += `<b>Modifier(s):</b> `;
+        }
+        this.table.statistics.forEach(stat => {
+          if (quality[stat] != 0) {
+            switch (stat) {
+              case 'spellcastingBonus':
+                let spellcastingBonus = quality[stat] <= 0 ? `decrease spellcasting by ${quality[stat]} level(s)`  : `increase spellcasting by ${quality[stat]} level(s)`
+                html += 'Spellcasting: ' + spellcastingBonus + '; ';
+                break;
+              case 'baseValueBonus':
+                let baseValueBonus = quality[stat] <= 0 ? `decrease by ${quality[stat] * 100}%` : `increase by ${quality[stat] * 100}%`
+                html += 'Base value: ' + baseValueBonus + '; ';
+                break;
+              case 'purchaseLimitBonus':
+                let purchaseLimitBonus = quality[stat] <= 0 ? `decrease by ${quality[stat] * 100}%` : `increase by ${quality[stat] * 100}%`
+                html += 'Purchase limit: ' + purchaseLimitBonus + '; ';
+                break;
+              default:
+                let genericBonus = quality[stat] <= 0 ? quality[stat] : '+' + quality[stat];
+                console.log(genericBonus);
+                html += stat.charAt(0).toUpperCase() + stat.slice(1) + ': ' + genericBonus + '; ';
+                break;
+            }
+          }
+        });
+        
+        html += `</div>`;
+        
+      });
+      
+      // console.log(html);
+      return html;
     }
   }
 }
