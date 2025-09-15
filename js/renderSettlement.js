@@ -1,35 +1,30 @@
 import createSettlement from "./components/Settlement.js";
 import rollArray from "./components/rollArray.js";
+// settlementTables is imported in the html as a script. It should probably be gotten here instead.
 
 function init() {
-  console.log('index');
+  settlementTables.qualities.forEach(element => {
+
+    console.log(element.name);
+  });
+
   update();
 
   document.querySelector('#updateBtn').addEventListener('click', (e) => {
     e.preventDefault();
     update();
   });
-
-  /*
-  let indexedtable = [];
-  settlementTables.qualities.forEach((element, i) => {
-    indexedtable[i] = element;
-  });
-
-  console.log(indexedtable);
-  */
 }
 
 function update() {
-  console.log('updating');
   let selectedSize = document.querySelector('#selectSize').value;
   if (selectedSize === 'any') {
-    selectedSize = rollArray(settlementTables.size)[0]
+    selectedSize = rollArray(settlementTables.sizes)[0]
   };
 
   let selectedAlignment = document.querySelector('#selectAlignment').value;
   if (selectedAlignment === 'any') {
-    selectedAlignment = rollArray(settlementTables.alignment)[0]
+    selectedAlignment = rollArray(settlementTables.alignments)[0]
   };
 
   const settlement = createSettlement();
@@ -37,10 +32,9 @@ function update() {
   settlement.setSize(selectedSize);
   settlement.setAlignment(selectedAlignment);
 
-  settlement.process();
-  settlement.render();
-  settlement.renderWiki();
+
   console.log(settlement);
+
 }
 
 init();
