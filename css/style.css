@@ -9928,14 +9928,7 @@ h3 {
     border-color: #dee2e6;
   }
 }
-.statistics {
-  position: relative;
-}
-
-.statistic {
-  display: inline;
-}
-.statistic .popper:hover + .popup, .statistic .popper:focus + .popup {
+.popper:hover + .popup, .popper:focus + .popup {
   display: block;
   position: absolute;
   background-color: white;
@@ -9944,13 +9937,9 @@ h3 {
   padding: 6px 8px 8px;
   border-radius: 4px;
 }
-.statistic .popper + .popup {
+.popper + .popup {
   display: none;
   margin-right: 20px;
-}
-
-.quality {
-  margin: 1rem 0 2rem;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -1,383 +1,399 @@
 import roll from "./rollArray.js";
+import { CardList } from "./CardList.js";
 
-export default function (tables) {
-  return new Settlement(tables)
-}
-
-class Settlement {
-  constructor(
-    size = roll(settlementTables.sizes)[0],
-    alignment = roll(settlementTables.alignments)[0],
-    tables = settlementTables
-  ) {
-    this.size = size;
-    this.alignment = alignment;
+export class Settlement {
+  constructor(tables) {
     this.table = tables;
+    this.size = 0;
+    this.alignment = '';
 
-    // this.population = this.table.populationValue[size];
     // this.type = this.table.sizeLabel[size];
+    this.statistics = [];
+    this.statistics.corruption = 0;
+    this.statistics.crime = 0;
+    this.statistics.economy = 0;
+    this.statistics.law = 0;
+    this.statistics.lore = 0;
+    this.statistics.society = 0;
 
-    this.corruption = 0;
-    this.crime = 0;
-    this.economy = 0;
-    this.law = 0;
-    this.lore = 0;
-    this.society = 0;
+    this.statistics.baseValueBonus = 0;
+    this.statistics.purchaseLimitBonus = 0;
 
-    // this.danger = this.table.danger[size];
-    this.baseValueBonus = 0;
-    this.purchaseLimitBonus = 0;
+    this.availableQualities   = this.table.qualities;
+    this.selectedQualities    = [];
+    this.selectedQualityNames = [];
+    this.selectedQualityNotes = [];
 
-    // this.qualityNumber = this.table.qualitiesValue[size];
-    this.qualities    = [];
-    this.qualityNames = [];
-    this.qualityNotes = [];
-
-    this.governments     = [];
-    this.governmentNames = [];
-    this.governmentNotes = [];
-
-    // this.modifierNumber = this.table.modifier[size];
-    this.modifiers = [];
+    this.availableGovernments    = this.table.governments;
+    this.selectedGovernments     = [];
+    this.selectedGovernmentNames = [];
+    this.selectedGovernmentNotes = [];
 
     this.minorItems  = "";
     this.mediumItems = "";
     this.majorItems  = "";
 
-    // this.baseValue = this.table.baseValue[size];
     this.baseValueTotal = 0;
-    // this.purchaseLimit = this.table.purchaseLimit[size];
     this.purchaseLimitTotal = 0;
 
-    // this.spellcasting = size;
     this.spellcastingMax = "-";
+  }
 
-    this.setQualities = (qualities) => {
-      this.qualities = qualities
-    }
+  reset = () => {
+    this.statistics.corruption = 0;
+    this.statistics.crime = 0;
+    this.statistics.economy = 0;
+    this.statistics.law = 0;
+    this.statistics.lore = 0;
+    this.statistics.society = 0;
 
-    this.getQualities = () => {
-      return this.qualities;
-    }
+    this.statistics.baseValueBonus = 0;
+    this.statistics.purchaseLimitBonus = 0;
 
-    this.addQuality = (qualityId) => {
-      // TODO get the actual quality based on the ID
-      // Move quality from one collection to another! from available to active
-      quality = qualityId;
+    this.availableQualities   = this.table.qualities;
+    this.selectedQualities    = [];
+    this.selectedQualityNames = [];
+    this.selectedQualityNotes = [];
 
-      this.qualities.push(quality);
-    }
+    this.availableGovernments    = this.table.governments;
+    this.selectedGovernments     = [];
+    this.selectedGovernmentNames = [];
+    this.selectedGovernmentNotes = [];
 
-    this.removeQuality = (qualityId) => {
-      // move quality back to available collection
-      this.qualities.pop(qualityId);
-    }
+    this.minorItems  = "";
+    this.mediumItems = "";
+    this.majorItems  = "";
 
-    this.applyQualities = () => {
-      const qualities = roll(this.table.qualities, this.qualityNumber);
+    this.baseValueTotal = 0;
+    this.purchaseLimitTotal = 0;
 
-      for (let i = 0; i < qualities.length; i++) {
-        const quality = qualities[i];
+    this.spellcastingMax = "-";
+  }
 
-        this.qualities.push(quality);
-        this.qualityNames.push(quality.name)
-        this.qualityNotes = [...this.qualityNotes, ...quality.notes];
-
-        this.corruption += quality.corruption;
-        this.crime += quality.crime;
-        this.economy += quality.economy;
-        this.law += quality.law;
-        this.lore += quality.lore;
-        this.society += quality.society;
-        this.danger += quality.danger;
-
-        this.spellcasting += quality.spellcastingBonus;
-        this.baseValueBonus += this.baseValue * quality.baseValueBonus;
-        this.purchaseLimitBonus += this.purchaseLimit * quality.purchaseLimitBonus;
-      }
-    }
-
-    this.setGovernments = (governments) => {
-      this.governments = governments;
-    }
-
-    this.getGovernments = () => {
-      return this.governments;
-    }
-
-    this.applyGovernments = () => {
-      const governments = this.getGovernments();
-
-      for (let i = 0; i < governments.length; i++) {
-        const government = governments[i];
-
-        this.governments.push(government);
-        this.governmentNames.push(government.name);
-        this.governmentNotes = [...this.governmentNotes, ...government.notes]
-
-        this.corruption += government.corruption;
-        this.crime += government.crime;
-        this.economy += government.economy;
-        this.law += government.law;
-        this.lore += government.lore;
-        this.society += government.society;
-        this.danger += government.danger;
-
-        this.spellcasting += government.spellcastingBonus;
-        this.baseValueBonus += this.baseValue * government.baseValueBonus;
-        this.purchaseLimitBonus += this.purchaseLimit * government.purchaseLimitBonus;
-      }
-    }
-
-    this.setAlignment = (alignment) => {
-      this.alignment = alignment;
-    }
-
-    this.getAlignment = () => {
-      return this.alignment;
-    }
-
-    this.applyAlignment = () => {
-      const a = this.alignment;
-
-      if (a === 'LG' || a === 'LN' || a === 'LE') {
-        this.law++;
-      }
-      if (a === 'LG' || a === 'NG' || a === 'CG') {
-        this.society++;
-      }
-      if (a === 'CG' || a === 'CN' || a === 'CE') {
-        this.crime++;
-      }
-      if (a === 'LE' || a === 'NE' || a === 'CE') {
-        this.corruption++;
-      }
-      if (a === 'NG' || a === 'TN' || a === 'NE' || a === 'LN' || a === 'CN') {
-        this.lore++;
-        if (a === 'TN') {
-          this.lore++;
-        }
-      }
-    }
-
-    this.applySize = () => {
-      this.population = this.table.populationValue[this.size];
-      this.type = this.table.sizeLabel[this.size];
-
-      this.modifierNumber = this.table.modifier[this.size];
-
-      this.corruption = this.corruption + this.modifierNumber;
-      this.crime = this.crime + this.modifierNumber;
-      this.economy = this.economy + this.modifierNumber;
-      this.law = this.law + this.modifierNumber;
-      this.lore = this.lore + this.modifierNumber;
-      this.society = this.society + this.modifierNumber;
-
-      this.danger = this.table.danger[this.size];
-      this.qualityNumber = this.table.qualitiesValue[this.size];
-      this.baseValue = this.table.baseValue[this.size];
-      this.purchaseLimit = this.table.purchaseLimit[this.size];
-      this.spellcasting = this.size;
-    }
-
-    this.applySpells = () => {
-      if (this.spellcasting > this.table.spellcastingIndex.length) {
-        this.spellcasting = this.table.spellcastingIndex.length;
-      }
-
-      if (this.spellcasting < 0) {
-        this.spellcasting = 0;
-      }
-
-      this.spellcastingMax = this.table.spellcastingIndex[this.spellcasting];
-      this.purchaseLimitTotal = this.purchaseLimit + this.purchaseLimitBonus;
-      this.baseValueTotal = this.baseValue + this.baseValueBonus;
-
-      this.minorItems = this.table.magicItemsBySpellcasting[this.size + 4];
-      this.mediumItems = this.table.magicItemsBySpellcasting[this.size + 2];
-      this.majorItems = this.table.magicItemsBySpellcasting[this.size + 0];
-    }
-
-    this.process = () => {
-      this.applySize();
-      this.applyAlignment();
-      this.applyQualities();
-      this.applyGovernments();
-      this.applySpells();
-    }
-
-    this.render = (selector = document.querySelector(".info")) => {
-
-      // Qualities text
-      // let qualityText = '<p>';
-      let qualitiesWikiLinks = '';
-      // let qualitiesWikiEntries = '';
-      for (let i = 0; i < this.qualities.length; i++) {
-        const quality = this.qualities[i];
-        qualitiesWikiLinks += `[[#${quality.name}|${quality.name}]]`;
-        if (i != this.qualities.length) {
-          qualitiesWikiLinks += ', ';
-        }
-      }
-
-      let html = `<p>
-        <div class="statistic">
-          <span class="popper"><b>${this.alignment}</b></span>
-          <span class="popup"><p>A settlement’s alignment not only describes the community’s general personality and attitude, but also influences its modifiers.</p>
-          <ul>
-            <li>A lawful component to a settlement’s alignment increases its law modifier by 1.</li>
-            <li>A good component increases its society modifier by 1.</li>
-            <li>A chaotic component increases its crime modifier by 1.</li>
-            <li>An evil component increases its corruption modifier by 1.</li>
-            <li>A neutral component increases its lore modifier by 1 (a truly neutral city gains an increase of 2 to its lore modifier).</li>
-          </ul>
-          <p>Alignment never modifies a settlement’s economy modifier.</p></div>
-        </div> <b>${this.type}</b>
-
-      </p>
-      <p>
-        <b>Population:</b> ${this.table.populationValue[this.size]}
-      </p>
-      <p class="statistics">
-        <div class="statistic">
-          <span class="popper"><b>Corruption</b> ${this.corruption};</span>
-          <span class="popup">A settlement’s corruption modifies all Bluff checks made against city officials or guards and all Stealth checks made outside (but not inside buildings or underground).</span>
-        </div>
-        <div class="statistic">
-          <span class="popper"><b>Crime</b> ${this.crime};</span>
-          <span class="popup">The atmosphere generated by a settlement’s crime level applies as a modifier on Sense Motive checks to avoid being bluffed and to Sleight of Hand checks made to pick pockets.</span>
-        </div>
-        <div class="statistic">
-          <span class="popper"><b>Economy</b> ${this.economy};</span>
-          <span class="popup">A settlement’s economy helps its citizens make money, and thus it applies as a modifier on all Craft, Perform, and Profession checks made to generate income.</span>
-        </div>
-        <div class="statistic">
-          <span class="popper"><b>Law</b> ${this.law};</span>
-          <span class="popup">A settlement’s law modifier applies on Intimidate checks made to force an opponent to act friendly, Diplomacy checks against government officials, or Diplomacy checks made to call on the city guard.</span>
-        </div>
-        <div class="statistic">
-          <span class="popper"><b>Lore</b> ${this.lore};</span>
-          <span class="popup">A settlement’s lore modifier applies on Diplomacy checks made to gather information and Knowledge checks made using the city’s resources to do research when using a library.</span>
-        </div>
-        <div class="statistic">
-          <span class="popper"><b>Society</b> ${this.society};</span>
-          <span class="popup">A settlement’s society modifier applies on all Disguise checks, as well as on Diplomacy checks made to alter the attitude of any non-government official.</span>
-        </div>
-      </p>
-
-      <p>
-        <div class="statistic">
-          <span class="popper danger"><b>Danger:</b> ${this.danger};</span>
-          <span class="popup">A settlement’s danger value is a number that gives a general idea of how dangerous it is to live in the settlement. A settlement’s base danger value depends on its type.</span>
-        </div>
-      </p>
-
-      <hr>
-      <p><b>Qualities:</b> ${this.qualityNames.join(", ")}</p>
-
-      ${this.printModifiers(this.qualities)}
-
-      <hr>
-      <p><b>Government:</b> ${this.governmentNames.join(", ")}</p>
-
-      ${this.printModifiers(this.governments)}
-
-      <p>
-        <b>Base value:</b> ${this.baseValueTotal};
-        <b>Purchase limit:</b> ${this.purchaseLimitTotal};
-        <b>Highest spell level:</b> ${this.spellcastingMax};
-      </p>
-      <p>
-        <b>Minor items</b> ${this.minorItems};
-        <b>Medium items</b> ${this.mediumItems};
-        <b>Major items</b> ${this.majorItems};
-      </p>`;
-
-      selector.innerHTML = html;
-      this.qualitiesWikiLinks = qualitiesWikiLinks;
-    }
-
-    this.renderWiki = (selector = document.querySelector(".template")) => {
-      selector.innerHTML =
-        `{{City |name=City |alignment=${this.alignment} |type=${this.type} |corruption=${this.corruption} |crime=${this.crime} |economy=${this.economy} |law=${this.law} |lore=${this.lore} |society=${this.society} |qualities=${this.qualitiesWikiLinks} |danger=${this.danger} |government=${this.governmentNames.join(", ")} |population=${this.population} |notable_npcs= |base_val=${this.baseValueTotal} |purchase_limit=${this.purchaseLimitTotal} |spellcasting=${this.spellcastingMax} |minor=${this.minorItems} |medium=${this.mediumItems} |major=${this.majorItems}}}
-        <div>
-          <p>== Qualities ==</p>
-          ${this.printModifiers(this.qualities, true)}
-        </div>
-        <div>
-          <p>== Government ==</p>
-          ${this.printModifiers(this.governments, true)}
-        </div>`;
-    }
-
-    this.setSize = (size) => {
-      this.size = parseInt(size);
-    };
-
-    this.getSize = () => {
-      return this.size;
-    };
-
-    this.setAlignment = (alignment) => {
-      this.alignment = alignment;
-    };
-
-    this.getAlignment = () => {
-      return this.alignment;
-    };
-
-    this.printModifiers = (qualities, wikiMode = false) => {
-      let html = '';
-
-      if (wikiMode) {
-        html += ``;
-      } else {
-        html += ``;
-      }
-
+  setQualities = (qualities, mode = '') => {
+    if (mode === 'government') {
       qualities.forEach(quality => {
-        html += `<div class="quality">`;
-        if (wikiMode) {
-          html += `=== ${quality.name} ===<br>`;
-          html += `${quality.notes}<br>`;
-          html += `<br>`;
-          html += `'''Modifier(s):''' `;
-        } else {
-          html += `<b>${quality.name}</b>`;
-          html += `<br>${quality.notes}`;
-          html += `<br>`;
-          html += `<b>Modifier(s):</b> `;
+        this.selectedGovernments.push(quality);
+        this.selectedGovernmentNames.push(quality["name"])
+        this.selectedGovernmentNotes = [...this.selectedGovernmentNotes, ...quality["notes"]];
+      });
+    } else {
+      qualities.forEach(quality => {
+        this.selectedQualities.push(quality);
+        this.selectedQualityNames.push(quality["name"])
+        this.selectedQualityNotes = [...this.selectedQualityNotes, ...quality["notes"]];
+      });
+    }
+  }
+
+  getQualities = (mode = '') => {
+    if (mode === 'government') {
+      return qualitiesToApply = this.selectedGovernments;
+    } else {
+      return qualitiesToApply = this.selectedQualities;
+    }
+  }
+
+  addQuality = (quality, mode = '') => {
+    // TODO: get the actual quality based on the ID
+    // Move quality from one collection to another! from available to active
+    if (mode === 'government') {
+      this.selectedGovernments.push(quality);
+    } else {
+      this.selectedQualities.push(quality);
+    }
+  }
+
+  removeQuality = (qualityId, mode = '') => {
+    // TODO: move back/reenable removed quality
+    // move quality back to available collection
+    if (mode === 'government') {
+      this.selectedGovernments.pop(qualityId);
+    } else {
+      this.selectedQualities.pop(qualityId);
+    }
+
+  }
+
+  applyQualities = (mode = '') => {
+    let qualitiesToApply = '';
+    if (mode === 'government') {
+      qualitiesToApply = this.selectedGovernments;
+    } else {
+      qualitiesToApply = this.selectedQualities;
+    }
+
+    qualitiesToApply.forEach(quality => {
+      this.table.statistics.forEach(statName => {
+        switch (statName) {
+          case "corruption":
+          case "crime":
+          case "economy":
+          case "law":
+          case "lore":
+          case "society":
+          case "danger":
+          case "spellcastingBonus":
+            this.statistics[statName] += quality[statName];
+            break;
+          case "baseValueBonus":
+            this.statistics[statName] += this.baseValue * quality[statName];
+            break;
+          case "purchaseLimitBonus":
+            this.statistics[statName] += this.purchaseLimit * quality[statName];
+            break;
         }
-        this.table.statistics.forEach(stat => {
-          if (quality[stat] != 0) {
-            switch (stat) {
-              case 'spellcastingBonus':
-                let spellcastingBonus = quality[stat] <= 0 ? `decrease spellcasting by ${quality[stat]} level(s)`  : `increase spellcasting by ${quality[stat]} level(s)`
-                html += 'Spellcasting: ' + spellcastingBonus + '; ';
-                break;
-              case 'baseValueBonus':
-                let baseValueBonus = quality[stat] <= 0 ? `decrease by ${quality[stat] * 100}%` : `increase by ${quality[stat] * 100}%`
-                html += 'Base value: ' + baseValueBonus + '; ';
-                break;
-              case 'purchaseLimitBonus':
-                let purchaseLimitBonus = quality[stat] <= 0 ? `decrease by ${quality[stat] * 100}%` : `increase by ${quality[stat] * 100}%`
-                html += 'Purchase limit: ' + purchaseLimitBonus + '; ';
-                break;
-              default:
-                let genericBonus = quality[stat] <= 0 ? quality[stat] : '+' + quality[stat];
-                console.log(genericBonus);
-                html += stat.charAt(0).toUpperCase() + stat.slice(1) + ': ' + genericBonus + '; ';
-                break;
-            }
+      })
+    });
+  }
+
+  setGovernments = (governments) => {
+    this.setQualities(governments, 'government')
+  }
+
+  getGovernments = () => {
+    return this.getQualities('government');
+  }
+
+  addGovernment = () => {
+    this.addQuality('government')
+  }
+
+  removeGovernment = () => {
+    this.removeQuality('government')
+  }
+
+  applyGovernments = () => {
+    this.applyQualities('government');
+  }
+
+  setAlignment = (alignment) => {
+    this.alignment = alignment;
+  }
+
+  getAlignment = () => {
+    return this.alignment;
+  }
+
+  applyAlignment = () => {
+    const a = this.alignment;
+
+    if (a === 'LG' || a === 'LN' || a === 'LE') {
+      this.statistics.law++;
+    }
+    if (a === 'LG' || a === 'NG' || a === 'CG') {
+      this.statistics.society++;
+    }
+    if (a === 'CG' || a === 'CN' || a === 'CE') {
+      this.statistics.crime++;
+    }
+    if (a === 'LE' || a === 'NE' || a === 'CE') {
+      this.statistics.corruption++;
+    }
+    if (a === 'NG' || a === 'TN' || a === 'NE' || a === 'LN' || a === 'CN') {
+      this.statistics.lore++;
+      if (a === 'TN') {
+        this.statistics.lore++;
+      }
+    }
+  }
+
+  setSize = (size) => {
+    this.size = size;
+  };
+
+  getSize = () => {
+    return this.size;
+  };
+
+  applySize = () => {
+    this.type = this.table.sizeLabels[this.size];
+    this.modifierNumber = this.table.modifiers[this.size];
+
+    this.table.statistics.forEach(statName => {
+      switch (statName) {
+        case "corruption":
+        case "crime":
+        case "economy":
+        case "law":
+        case "lore":
+        case "society":
+          this.statistics[statName] = this.statistics[statName] + this.modifierNumber;
+          break;
+      }
+    })
+
+    this.statistics.danger = this.table.dangers[this.size];
+    this.statistics.spellcastingBonus = this.size;
+
+    this.selectedQualityNumber = this.table.qualitiesValues[this.size];
+    this.baseValue = this.table.baseValues[this.size];
+    this.purchaseLimit = this.table.purchaseLimits[this.size];
+  }
+
+  getQualitySlots = () => {
+    return this.table.qualitiesValues[this.size];
+  }
+
+  getGovernmentSlots = () => {
+    return 1;
+  }
+
+  setSpellcasting = () => {
+
+  }
+
+  getSpellcasting = () => {
+
+  }
+
+  applySpellcasting = () => {
+    // Cap if above 9th level
+    if (this.statistics.spellcastingBonus > this.table.spellcastingIndexes.length) {
+      this.statistics.spellcastingBonus = this.table.spellcastingIndexes.length;
+    }
+
+    // Raise to minimum 0
+    if (this.statistics.spellcastingBonus < 0) {
+      this.statistics.spellcastingBonus = 0;
+    }
+
+    this.spellcastingMax = this.table.spellcastingIndexes[this.statistics.spellcastingBonus];
+    this.purchaseLimitTotal = this.purchaseLimit + this.statistics.purchaseLimitBonus;
+    this.baseValueTotal = this.baseValue + this.statistics.baseValueBonus;
+
+    this.minorItems = this.table.magicItemsBySpellcasting[this.size + 4];
+    this.mediumItems = this.table.magicItemsBySpellcasting[this.size + 2];
+    this.majorItems = this.table.magicItemsBySpellcasting[this.size + 0];
+  }
+
+  // Full processing - reset and apply.
+  calculate = () => {
+    this.reset();
+
+    this.applySize();
+    this.applyAlignment();
+
+    this.setQualities(roll(this.availableQualities, this.getQualitySlots()));
+    this.setQualities(roll(this.availableGovernments, this.getGovernmentSlots()), 'government');
+
+    this.applyQualities();
+    this.applyGovernments();
+
+
+    this.applySpellcasting();
+  }
+
+  render = () => {
+    /*
+    <p>
+    <b>Base value:</b> ${this.baseValueTotal};
+    <b>Purchase limit:</b> ${this.purchaseLimitTotal};
+    <b>Highest spell level:</b> ${this.spellcastingMax};
+    </p>
+    <p>
+    <b>Minor items</b> ${this.minorItems};
+    <b>Medium items</b> ${this.mediumItems};
+    <b>Major items</b> ${this.majorItems};
+    </p>`;
+    */
+
+    document.querySelector('#alignment').innerHTML = this.alignment
+    document.querySelector('#type').innerHTML = this.type + ' (' + this.size + ')'
+    document.querySelector('#population-range').innerHTML = this.table.populationValues[this.size];
+    document.querySelector('#short-government').innerHTML = this.selectedGovernmentNames.join(', ');
+    let qualitiesHtml = '';
+    this.selectedQualityNames.forEach(qualityName => {
+      qualitiesHtml += `<li>${qualityName}</li>`;
+    });
+    document.querySelector('#short-qualities').innerHTML = qualitiesHtml;
+
+    ["corruption","crime","economy","law","lore","society","danger"].forEach(statName => {
+      document.querySelector('#' + statName + '-score' ).innerHTML = this.statistics[statName];
+    });
+
+    let cardList = new CardList(this);
+    cardList.printAvailableQualities();
+    cardList.printAvailableGovernments();
+
+    cardList.printSelectedQualities();
+  }
+
+  renderWiki = () => {
+    const selector = document.querySelector("#template");
+    let qualitiesWikiLinks = '';
+
+    for (let i = 0; i < this.selectedQualities.length; i++) {
+      const quality = this.selectedQualities[i];
+      qualitiesWikiLinks += `[[#${quality.name}|${quality.name}]]`;
+      if (i != this.selectedQualities.length) {
+        qualitiesWikiLinks += ', ';
+      }
+    }
+
+    selector.innerHTML =
+    `{{City |name=City |alignment=${this.alignment} |type=${this.type} |corruption=${this.statistics.corruption} |crime=${this.statistics.crime} |economy=${this.statistics.economy} |law=${this.statistics.law} |lore=${this.statistics.lore} |society=${this.statistics.society} |qualities=${qualitiesWikiLinks} |danger=${this.danger} |government=${this.selectedGovernmentNames.join(", ")} |population=${this.table.populationValues[this.size]} |notable_npcs= |base_val=${this.baseValueTotal} |purchase_limit=${this.purchaseLimitTotal} |spellcasting=${this.spellcastingMax} |minor=${this.minorItems} |medium=${this.mediumItems} |major=${this.majorItems}}}
+    <div>
+    <p>== Qualities ==</p>
+    ${this.printModifiers(this.selectedQualities, true)}
+    </div>
+    <div>
+    <p>== Government ==</p>
+    ${this.printModifiers(this.selectedGovernments, true)}
+    </div>`;
+  }
+
+  printModifiers = (qualities, wikiMode = true) => {
+    let html = '';
+
+    if (wikiMode) {
+      html += ``;
+    } else {
+      html += ``;
+    }
+
+    qualities.forEach(quality => {
+      html += `<div class="quality">`;
+      if (wikiMode) {
+        html += `=== ${quality.name} ===<br>`;
+        html += `${quality.notes}<br>`;
+        html += `<br>`;
+        html += `'''Modifier(s):''' `;
+      } else {
+        html += `<b>${quality.name}</b>`;
+        html += `<br>${quality.notes}`;
+        html += `<br>`;
+        html += `<b>Modifier(s):</b> `;
+      }
+      this.table.statistics.forEach(stat => {
+        if (quality[stat] != 0) {
+          switch (stat) {
+            case 'spellcastingBonus':
+            let spellcastingBonus = quality[stat] <= 0 ? `decrease spellcasting by ${quality[stat]} level(s)`  : `increase spellcasting by ${quality[stat]} level(s)`
+            html += 'Spellcasting: ' + spellcastingBonus + '; ';
+            break;
+            case 'baseValueBonus':
+            let baseValueBonus = quality[stat] <= 0 ? `decrease by ${quality[stat] * 100}%` : `increase by ${quality[stat] * 100}%`
+            html += 'Base value: ' + baseValueBonus + '; ';
+            break;
+            case 'purchaseLimitBonus':
+            let purchaseLimitBonus = quality[stat] <= 0 ? `decrease by ${quality[stat] * 100}%` : `increase by ${quality[stat] * 100}%`
+            html += 'Purchase limit: ' + purchaseLimitBonus + '; ';
+            break;
+            default:
+            let genericBonus = quality[stat] <= 0 ? quality[stat] : '+' + quality[stat];
+            /* console.log(genericBonus); */
+            html += stat.charAt(0).toUpperCase() + stat.slice(1) + ': ' + genericBonus + '; ';
+            break;
           }
-        });
-
-        html += `</div>`;
-
+        }
       });
 
-      // console.log(html);
-      return html;
-    }
+      html += `</div>`;
+
+    });
+
+    // console.log(html);
+    return html;
   }
 }

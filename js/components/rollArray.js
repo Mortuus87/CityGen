@@ -2,20 +2,20 @@
  * Retrieve one or more values from an array.
  *
  * @param {array} array Array to pick a random one from.
- * @param {number} iterations (optional) Number of values to extract.
+ * @param {number} count (optional) Number of values to extract.
  * @return {array} Returns resulting array.
  */
-export default function (array, iterations = 1) {
+export default function (array, count = 1) {
   if (Array.isArray(array)) {
     array = shuffle(array);
 
-    let returnArray = [];
+    let results = [];
 
-    for (let i = 0; i < iterations; i++) {
-      returnArray.push(array.pop());
+    for (let i = 0; i < count; i++) {
+      results.push(array.pop());
     }
 
-    return returnArray;
+    return results;
   }
 }
 
@@ -28,5 +28,7 @@ export default function (array, iterations = 1) {
  * @returns
  */
 function shuffle(array) {
-  return array.map(a => ({sort: Math.random(), value: a })).sort((a, b) => a.sort - b.sort).map(a => a.value);
+  return array.map(a => ({
+    sort: Math.random(), value: a
+  })).sort((a, b) => a.sort - b.sort).map(a => a.value);
 }

@@ -1,46 +1,43 @@
-import createSettlement from "./components/Settlement.js";
+import { Settlement } from "./components/Settlement.js";
+import { CardList } from "./components/CardList.js";
 import rollArray from "./components/rollArray.js";
+import data from '../json/settlement.json' with { type: 'json' };
 
 function init() {
-  console.log('index');
-  update();
+  const settlement = new Settlement(data);
+  update(settlement);
 
   document.querySelector('#updateBtn').addEventListener('click', (e) => {
     e.preventDefault();
-    update();
+    update(settlement);
   });
 
-  /*
-  let indexedtable = [];
-  settlementTables.qualities.forEach((element, i) => {
-    indexedtable[i] = element;
-  });
-
-  console.log(indexedtable);
-  */
+  // Other listeners?
 }
 
-function update() {
-  console.log('updating');
+init();
+
+function update(settlement) {
+  /* Se selector values, or randomize */
   let selectedSize = document.querySelector('#selectSize').value;
   if (selectedSize === 'any') {
-    selectedSize = rollArray(settlementTables.size)[0]
+    selectedSize = rollArray(data.sizes)
   };
 
   let selectedAlignment = document.querySelector('#selectAlignment').value;
   if (selectedAlignment === 'any') {
-    selectedAlignment = rollArray(settlementTables.alignment)[0]
+    selectedAlignment = rollArray(data.alignments)
   };
 
-  const settlement = createSettlement();
-
+  /* Setters */
   settlement.setSize(selectedSize);
   settlement.setAlignment(selectedAlignment);
 
-  settlement.process();
+  /* Calculation */
+  settlement.calculate();
+
+  /* Presentation */
+  console.log(settlement);
   settlement.render();
   settlement.renderWiki();
-  console.log(settlement);
 }
-
-init();
