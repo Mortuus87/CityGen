@@ -1,5 +1,15 @@
-import roll from "./rollArray.js";
+import { roll } from "./rollArray.js";
 import { CardList } from "./CardList.js";
+
+const Type = {
+  GOVERNMENT: 'government',
+  QUALITY: 'quality',
+}
+
+const Direction = {
+  TO_SELECTED: 'selected',
+  TO_AVAILABLE: 'available',
+}
 
 export class Settlement {
   constructor(tables) {
@@ -50,12 +60,12 @@ export class Settlement {
     this.statistics.baseValueBonus = 0;
     this.statistics.purchaseLimitBonus = 0;
 
-    this.availableQualities   = this.table.qualities;
+    this.availableQualities   = [...this.availableQualities, ...this.selectedQualities];
     this.selectedQualities    = [];
     this.selectedQualityNames = [];
     this.selectedQualityNotes = [];
 
-    this.availableGovernments    = this.table.governments;
+    this.availableGovernments    = [...this.availableGovernments, ...this.selectedGovernments];
     this.selectedGovernments     = [];
     this.selectedGovernmentNames = [];
     this.selectedGovernmentNotes = [];
@@ -70,54 +80,74 @@ export class Settlement {
     this.spellcastingMax = "-";
   }
 
-  setQualities = (qualities, mode = '') => {
-    if (mode === 'government') {
+  moveQuality = (uid, type, direction) => {
+    if (type === Type.GOVERNMENT) {
+      if (direction === Direction.TO_SELECTED) {
+        // move from available to selected
+        this.availableGovernments.forEach((government, i) => {
+          if (government.uid === uid) {
+            console.log('moving', uid, government.name, direction);
+            this.selectedGovernments.push(this.availableGovernments.splice(i, 1)[0]);
+          }
+        });
+      } else {
+        // assume move from selected to available
+        this.selectedGovernments.forEach((government, i) => {
+          if (government.uid === uid) {
+            console.log('moving', uid, government.name, direction);
+            this.availableGovernments.push(this.selectedGovernments.splice(i, 1)[0]);
+          }
+        });
+      }
+    } else if (type === Type.QUALITY) {
+      // assume quality
+      if (direction === Direction.TO_SELECTED) {
+        // move from available to selected
+        this.availableQualities.forEach((quality, i) => {
+          if (quality.uid === uid) {
+            console.log('moving', uid, quality.name, direction);
+            this.selectedQualities.push(this.availableQualities.splice(i, 1)[0])
+          }
+        });
+      } else {
+        // assume move from selected to available
+        this.selectedQualities.forEach((quality, i) => {
+          if (quality.uid === uid) {
+            console.log('moving', uid, quality.name, direction);
+            this.availableQualities.push(this.selectedQualities.splice(i, 1)[0])
+          }
+        });
+      }
+    }
+  }
+
+  setQualities = (qualities, mode = Type.QUALITY) => {
+    if (mode === Type.GOVERNMENT) {
       qualities.forEach(quality => {
-        this.selectedGovernments.push(quality);
+        this.moveQuality(quality.uid, Type.GOVERNMENT, Direction.TO_SELECTED);
         this.selectedGovernmentNames.push(quality["name"])
         this.selectedGovernmentNotes = [...this.selectedGovernmentNotes, ...quality["notes"]];
       });
-    } else {
+    } else if (mode === Type.QUALITY) {
       qualities.forEach(quality => {
-        this.selectedQualities.push(quality);
+        this.moveQuality(quality.uid, Type.QUALITY, Direction.TO_SELECTED);
         this.selectedQualityNames.push(quality["name"])
         this.selectedQualityNotes = [...this.selectedQualityNotes, ...quality["notes"]];
       });
     }
   }
 
-  getQualities = (mode = '') => {
-    if (mode === 'government') {
-      return qualitiesToApply = this.selectedGovernments;
-    } else {
-      return qualitiesToApply = this.selectedQualities;
+  getQualities = (mode = Type.QUALITY) => {
+    if (mode === Type.GOVERNMENT) {
+      return this.selectedGovernments;
+    } else if (mode === Type.QUALITY) {
+      return this.selectedQualities;
     }
   }
 
-  addQuality = (quality, mode = '') => {
-    // TODO: get the actual quality based on the ID
-    // Move quality from one collection to another! from available to active
-    if (mode === 'government') {
-      this.selectedGovernments.push(quality);
-    } else {
-      this.selectedQualities.push(quality);
-    }
-  }
-
-  removeQuality = (qualityId, mode = '') => {
-    // TODO: move back/reenable removed quality
-    // move quality back to available collection
-    if (mode === 'government') {
-      this.selectedGovernments.pop(qualityId);
-    } else {
-      this.selectedQualities.pop(qualityId);
-    }
-
-  }
-
-  applyQualities = (mode = '') => {
+  applyQualities = (mode = Type.QUALITY) => {
     let qualitiesToApply = '';
-    if (mode === 'government') {
+    if (mode === Type.GOVERNMENT) {
       qualitiesToApply = this.selectedGovernments;
     } else {
       qualitiesToApply = this.selectedQualities;
@@ -147,24 +177,12 @@ export class Settlement {
     });
   }
 
-  setGovernments = (governments) => {
-    this.setQualities(governments, 'government')
-  }
-
   getGovernments = () => {
-    return this.getQualities('government');
-  }
-
-  addGovernment = () => {
-    this.addQuality('government')
-  }
-
-  removeGovernment = () => {
-    this.removeQuality('government')
+    return this.getQualities(Type.GOVERNMENT);
   }
 
   applyGovernments = () => {
-    this.applyQualities('government');
+    this.applyQualities(Type.GOVERNMENT);
   }
 
   setAlignment = (alignment) => {
@@ -274,12 +292,11 @@ export class Settlement {
     this.applySize();
     this.applyAlignment();
 
-    this.setQualities(roll(this.availableQualities, this.getQualitySlots()));
-    this.setQualities(roll(this.availableGovernments, this.getGovernmentSlots()), 'government');
+    this.setQualities(roll(this.availableQualities, this.getQualitySlots()), Type.QUALITY);
+    this.setQualities(roll(this.availableGovernments, this.getGovernmentSlots()), Type.GOVERNMENT);
 
-    this.applyQualities();
-    this.applyGovernments();
-
+    this.applyQualities(Type.QUALITY);
+    this.applyQualities(Type.GOVERNMENT);
 
     this.applySpellcasting();
   }
@@ -298,10 +315,13 @@ export class Settlement {
     </p>`;
     */
 
+    console.log(this);
+
     document.querySelector('#alignment').innerHTML = this.alignment
     document.querySelector('#type').innerHTML = this.type + ' (' + this.size + ')'
     document.querySelector('#population-range').innerHTML = this.table.populationValues[this.size];
     document.querySelector('#short-government').innerHTML = this.selectedGovernmentNames.join(', ');
+
     let qualitiesHtml = '';
     this.selectedQualityNames.forEach(qualityName => {
       qualitiesHtml += `<li>${qualityName}</li>`;
@@ -313,10 +333,11 @@ export class Settlement {
     });
 
     let cardList = new CardList(this);
-    cardList.printAvailableQualities();
-    cardList.printAvailableGovernments();
-
+    cardList.printSelectedGovernments();
     cardList.printSelectedQualities();
+
+    cardList.printAvailableGovernments();
+    cardList.printAvailableQualities();
   }
 
   renderWiki = () => {

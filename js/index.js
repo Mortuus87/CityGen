@@ -1,6 +1,5 @@
 import { Settlement } from "./components/Settlement.js";
-import { CardList } from "./components/CardList.js";
-import rollArray from "./components/rollArray.js";
+import { roll as rollArray } from "./components/rollArray.js";
 import data from '../json/settlement.json' with { type: 'json' };
 
 function init() {
@@ -37,7 +36,7 @@ function update(settlement) {
   settlement.calculate();
 
   /* Presentation */
-  console.log(settlement);
+  // console.log(settlement);
   settlement.render();
   settlement.renderWiki();
 }

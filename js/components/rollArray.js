@@ -5,18 +5,18 @@
  * @param {number} count (optional) Number of values to extract.
  * @return {array} Returns resulting array.
  */
-export default function (array, count = 1) {
-  if (Array.isArray(array)) {
-    array = shuffle(array);
+export function roll(array, count = 1) {
+  let results = [];
+  if (Array.isArray(array) && array.length > 0) {
+    let shuffledArray = shuffle(array);
 
-    let results = [];
 
     for (let i = 0; i < count; i++) {
-      results.push(array.pop());
+      results.push(shuffledArray.pop());
     }
-
-    return results;
   }
+
+  return results;
 }
 
 /**
