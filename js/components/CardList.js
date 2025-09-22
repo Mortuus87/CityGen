@@ -1,6 +1,6 @@
 const Operation = {
-  ADD: 'add',
-  REMOVE: 'remove',
+  TO_SELECTED: 'add',
+  TO_AVAILABLE: 'remove'
 }
 
 export class CardList {
@@ -13,9 +13,9 @@ export class CardList {
 
   printAvailableQualities = () => {
     let html = '';
-    let qualities = this.sortByName(this.settlement.selectedQualities);
+    let qualities = this.sortByName(this.settlement.availableQualities);
     qualities.forEach((quality) => {
-      html += this.getCard(quality, Operation.ADD);
+      html += this.getCard(quality, Operation.TO_SELECTED);
     });
 
     document.querySelector("#available-qualities").innerHTML = html;
@@ -25,7 +25,7 @@ export class CardList {
     let html = '';
     let governments = this.sortByName(this.settlement.availableGovernments);
     governments.forEach((government) => {
-      html += this.getCard(government, Operation.ADD);
+      html += this.getCard(government, Operation.TO_SELECTED);
     });
 
     document.querySelector("#available-governments").innerHTML = html;
@@ -35,7 +35,7 @@ export class CardList {
     let html = '';
     let qualities = this.sortByName(this.settlement.selectedQualities);
     qualities.forEach((quality) => {
-      html += this.getCard(quality, Operation.REMOVE);
+      html += this.getCard(quality, Operation.TO_AVAILABLE);
     });
 
     document.querySelector("#selected-qualities").innerHTML = html;
@@ -46,7 +46,7 @@ export class CardList {
     let html = '';
     let governments = this.sortByName(this.settlement.selectedGovernments);
     governments.forEach((government) => {
-      html += this.getCard(government, Operation.REMOVE);
+      html += this.getCard(government, Operation.TO_AVAILABLE);
     });
 
     document.querySelector("#selected-governments").innerHTML = html;
@@ -65,14 +65,14 @@ export class CardList {
     return array;
 };
 
-  getCard = (quality, type) => {
+  getCard = (quality, operation) => {
     return `
     <div class="card" id="${quality.uid}">
       <div class="card-body">
         <div class="row">
           <div class="col-12">
             <h3>${quality.name}</h3>
-            <span>${type === Operation.REMOVE ? 'remove' : 'add'}</span>
+            <a class="quality-control" data-type="${quality.type}" data-uid="${quality.uid}" data-operation="${operation}">${operation}</a>
           </div>
           <div class="col-12">
             <details>
@@ -85,13 +85,13 @@ export class CardList {
     </div>`;
   }
 
-  getEmptyCard = (type) => {
-    return `<div class="card empty-${type}">
+  getEmptyCard = (operation) => {
+    return `<div class="card empty-${operation}">
     <div class="card-body">
       <div class="row">
         <div class="col-12">
           <h3>${quality.name}</h3>
-          <span>roll ${type}</span>
+          <a class="${quality.type}" data-uid="${quality.uid}" data-operation="${operation}">${operation}</a>
         </div>
         <div class="col-12">
           <details>

@@ -6,37 +6,29 @@ const Type = {
   QUALITY: 'quality',
 }
 
-const Direction = {
-  TO_SELECTED: 'selected',
-  TO_AVAILABLE: 'available',
+export const Operation = {
+  TO_SELECTED: 'add',
+  TO_AVAILABLE: 'remove',
 }
 
+/**
+ * TODO: extract any rendering classes into a separate module. This class should only handle internal logic, not presentation.
+ */
 export class Settlement {
   constructor(tables) {
     this.table = tables;
     this.size = 0;
     this.alignment = '';
 
-    // this.type = this.table.sizeLabel[size];
-    this.statistics = [];
-    this.statistics.corruption = 0;
-    this.statistics.crime = 0;
-    this.statistics.economy = 0;
-    this.statistics.law = 0;
-    this.statistics.lore = 0;
-    this.statistics.society = 0;
-
-    this.statistics.baseValueBonus = 0;
-    this.statistics.purchaseLimitBonus = 0;
+    this.statistics = []; // must be set for sub-arrays to have a home.
+    this.resetStatistics();
 
     this.availableQualities   = this.table.qualities;
     this.selectedQualities    = [];
-    this.selectedQualityNames = [];
     this.selectedQualityNotes = [];
 
     this.availableGovernments    = this.table.governments;
     this.selectedGovernments     = [];
-    this.selectedGovernmentNames = [];
     this.selectedGovernmentNotes = [];
 
     this.minorItems  = "";
@@ -50,25 +42,8 @@ export class Settlement {
   }
 
   reset = () => {
-    this.statistics.corruption = 0;
-    this.statistics.crime = 0;
-    this.statistics.economy = 0;
-    this.statistics.law = 0;
-    this.statistics.lore = 0;
-    this.statistics.society = 0;
-
-    this.statistics.baseValueBonus = 0;
-    this.statistics.purchaseLimitBonus = 0;
-
-    this.availableQualities   = [...this.availableQualities, ...this.selectedQualities];
-    this.selectedQualities    = [];
-    this.selectedQualityNames = [];
-    this.selectedQualityNotes = [];
-
-    this.availableGovernments    = [...this.availableGovernments, ...this.selectedGovernments];
-    this.selectedGovernments     = [];
-    this.selectedGovernmentNames = [];
-    this.selectedGovernmentNotes = [];
+    this.resetQualities();
+    this.resetStatistics();
 
     this.minorItems  = "";
     this.mediumItems = "";
@@ -80,13 +55,35 @@ export class Settlement {
     this.spellcastingMax = "-";
   }
 
+  resetQualities = () => {
+    this.availableQualities   = [...this.availableQualities, ...this.selectedQualities];
+    this.selectedQualities    = [];
+    this.selectedQualityNotes = [];
+
+    this.availableGovernments    = [...this.availableGovernments, ...this.selectedGovernments];
+    this.selectedGovernments     = [];
+    this.selectedGovernmentNotes = [];
+  }
+
+  resetStatistics = () => {
+    this.statistics.corruption = 0;
+    this.statistics.crime = 0;
+    this.statistics.economy = 0;
+    this.statistics.law = 0;
+    this.statistics.lore = 0;
+    this.statistics.society = 0;
+    this.statistics.danger = 0;
+    this.statistics.baseValueBonus = 0;
+    this.statistics.purchaseLimitBonus = 0;
+  }
+
   moveQuality = (uid, type, direction) => {
+    // console.log('moving', uid, 'to', direction);
     if (type === Type.GOVERNMENT) {
-      if (direction === Direction.TO_SELECTED) {
+      if (direction === Operation.TO_SELECTED) {
         // move from available to selected
         this.availableGovernments.forEach((government, i) => {
           if (government.uid === uid) {
-            console.log('moving', uid, government.name, direction);
             this.selectedGovernments.push(this.availableGovernments.splice(i, 1)[0]);
           }
         });
@@ -94,18 +91,16 @@ export class Settlement {
         // assume move from selected to available
         this.selectedGovernments.forEach((government, i) => {
           if (government.uid === uid) {
-            console.log('moving', uid, government.name, direction);
             this.availableGovernments.push(this.selectedGovernments.splice(i, 1)[0]);
           }
         });
       }
     } else if (type === Type.QUALITY) {
       // assume quality
-      if (direction === Direction.TO_SELECTED) {
+      if (direction === Operation.TO_SELECTED) {
         // move from available to selected
         this.availableQualities.forEach((quality, i) => {
           if (quality.uid === uid) {
-            console.log('moving', uid, quality.name, direction);
             this.selectedQualities.push(this.availableQualities.splice(i, 1)[0])
           }
         });
@@ -113,7 +108,6 @@ export class Settlement {
         // assume move from selected to available
         this.selectedQualities.forEach((quality, i) => {
           if (quality.uid === uid) {
-            console.log('moving', uid, quality.name, direction);
             this.availableQualities.push(this.selectedQualities.splice(i, 1)[0])
           }
         });
@@ -124,15 +118,11 @@ export class Settlement {
   setQualities = (qualities, mode = Type.QUALITY) => {
     if (mode === Type.GOVERNMENT) {
       qualities.forEach(quality => {
-        this.moveQuality(quality.uid, Type.GOVERNMENT, Direction.TO_SELECTED);
-        this.selectedGovernmentNames.push(quality["name"])
-        this.selectedGovernmentNotes = [...this.selectedGovernmentNotes, ...quality["notes"]];
+        this.moveQuality(quality.uid, Type.GOVERNMENT, Operation.TO_SELECTED);
       });
     } else if (mode === Type.QUALITY) {
       qualities.forEach(quality => {
-        this.moveQuality(quality.uid, Type.QUALITY, Direction.TO_SELECTED);
-        this.selectedQualityNames.push(quality["name"])
-        this.selectedQualityNotes = [...this.selectedQualityNotes, ...quality["notes"]];
+        this.moveQuality(quality.uid, Type.QUALITY, Operation.TO_SELECTED);
       });
     }
   }
@@ -145,14 +135,11 @@ export class Settlement {
     }
   }
 
-  applyQualities = (mode = Type.QUALITY) => {
-    let qualitiesToApply = '';
-    if (mode === Type.GOVERNMENT) {
-      qualitiesToApply = this.selectedGovernments;
-    } else {
-      qualitiesToApply = this.selectedQualities;
-    }
+  applyQualities = () => {
+    // reset to not accumulate statistics
+    this.resetStatistics();
 
+    let qualitiesToApply = [...this.selectedGovernments, ...this.selectedQualities];
     qualitiesToApply.forEach(quality => {
       this.table.statistics.forEach(statName => {
         switch (statName) {
@@ -179,10 +166,6 @@ export class Settlement {
 
   getGovernments = () => {
     return this.getQualities(Type.GOVERNMENT);
-  }
-
-  applyGovernments = () => {
-    this.applyQualities(Type.GOVERNMENT);
   }
 
   setAlignment = (alignment) => {
@@ -249,14 +232,6 @@ export class Settlement {
     this.purchaseLimit = this.table.purchaseLimits[this.size];
   }
 
-  getQualitySlots = () => {
-    return this.table.qualitiesValues[this.size];
-  }
-
-  getGovernmentSlots = () => {
-    return 1;
-  }
-
   setSpellcasting = () => {
 
   }
@@ -285,20 +260,25 @@ export class Settlement {
     this.majorItems = this.table.magicItemsBySpellcasting[this.size + 0];
   }
 
+  fillQualities = () => {
+    this.setQualities(roll(this.availableQualities, this.table.qualitiesValues[this.size] - this.selectedQualities.length), Type.QUALITY);
+    this.setQualities(roll(this.availableGovernments, 1 - this.selectedGovernments.length), Type.GOVERNMENT);
+  }
+
   // Full processing - reset and apply.
   calculate = () => {
-    this.reset();
-
     this.applySize();
     this.applyAlignment();
-
-    this.setQualities(roll(this.availableQualities, this.getQualitySlots()), Type.QUALITY);
-    this.setQualities(roll(this.availableGovernments, this.getGovernmentSlots()), Type.GOVERNMENT);
-
-    this.applyQualities(Type.QUALITY);
-    this.applyQualities(Type.GOVERNMENT);
-
+    this.applyQualities();
     this.applySpellcasting();
+  }
+
+  getProperties = (array, property) => {
+    let retArray = [];
+    array.forEach(element => {
+      retArray.push(element[property]);
+    });
+    return retArray;
   }
 
   render = () => {
@@ -315,15 +295,14 @@ export class Settlement {
     </p>`;
     */
 
-    console.log(this);
-
     document.querySelector('#alignment').innerHTML = this.alignment
     document.querySelector('#type').innerHTML = this.type + ' (' + this.size + ')'
     document.querySelector('#population-range').innerHTML = this.table.populationValues[this.size];
-    document.querySelector('#short-government').innerHTML = this.selectedGovernmentNames.join(', ');
+
+    document.querySelector('#short-government').innerHTML = this.getProperties(this.selectedGovernments, 'name').join(', ');
 
     let qualitiesHtml = '';
-    this.selectedQualityNames.forEach(qualityName => {
+    this.getProperties(this.selectedQualities, 'name').forEach(qualityName => {
       qualitiesHtml += `<li>${qualityName}</li>`;
     });
     document.querySelector('#short-qualities').innerHTML = qualitiesHtml;
@@ -338,6 +317,15 @@ export class Settlement {
 
     cardList.printAvailableGovernments();
     cardList.printAvailableQualities();
+
+
+
+    /*
+    this.selectedGovernmentNotes = [...this.selectedGovernmentNotes, ...quality["notes"]];
+    this.selectedQualityNotes = [...this.selectedQualityNotes, ...quality["notes"]];
+    */
+
+    this.renderWiki();
   }
 
   renderWiki = () => {
@@ -353,7 +341,7 @@ export class Settlement {
     }
 
     selector.innerHTML =
-    `{{City |name=City |alignment=${this.alignment} |type=${this.type} |corruption=${this.statistics.corruption} |crime=${this.statistics.crime} |economy=${this.statistics.economy} |law=${this.statistics.law} |lore=${this.statistics.lore} |society=${this.statistics.society} |qualities=${qualitiesWikiLinks} |danger=${this.danger} |government=${this.selectedGovernmentNames.join(", ")} |population=${this.table.populationValues[this.size]} |notable_npcs= |base_val=${this.baseValueTotal} |purchase_limit=${this.purchaseLimitTotal} |spellcasting=${this.spellcastingMax} |minor=${this.minorItems} |medium=${this.mediumItems} |major=${this.majorItems}}}
+    `{{City |name=City |alignment=${this.alignment} |type=${this.type} |corruption=${this.statistics.corruption} |crime=${this.statistics.crime} |economy=${this.statistics.economy} |law=${this.statistics.law} |lore=${this.statistics.lore} |society=${this.statistics.society} |qualities=${qualitiesWikiLinks} |danger=${this.danger} |government=${this.getProperties(this.selectedGovernments, 'name').join(', ')} |population=${this.table.populationValues[this.size]} |notable_npcs= |base_val=${this.baseValueTotal} |purchase_limit=${this.purchaseLimitTotal} |spellcasting=${this.spellcastingMax} |minor=${this.minorItems} |medium=${this.mediumItems} |major=${this.majorItems}}}
     <div>
     <p>== Qualities ==</p>
     ${this.printModifiers(this.selectedQualities, true)}
