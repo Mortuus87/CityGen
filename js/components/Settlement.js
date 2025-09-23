@@ -37,8 +37,8 @@ export class Settlement {
 
     this.baseValueTotal = 0;
     this.purchaseLimitTotal = 0;
-
     this.spellcastingMax = "-";
+
   }
 
   reset = () => {
@@ -51,8 +51,11 @@ export class Settlement {
 
     this.baseValueTotal = 0;
     this.purchaseLimitTotal = 0;
-
     this.spellcastingMax = "-";
+
+    this.minorItems = "-";
+    this.mediumItems = "-";
+    this.majorItems = "-";
   }
 
   resetQualities = () => {
@@ -73,8 +76,9 @@ export class Settlement {
     this.statistics.lore = 0;
     this.statistics.society = 0;
     this.statistics.danger = 0;
-    this.statistics.baseValueBonus = 0;
-    this.statistics.purchaseLimitBonus = 0;
+    this.statistics.baseValueModifier = 0;
+    this.statistics.purchaseLimitModifier = 0;
+    this.statistics.spellcastingModifier = 0;
   }
 
   moveQuality = (uid, type, direction) => {
@@ -150,30 +154,22 @@ export class Settlement {
           case "lore":
           case "society":
           case "danger":
-          case "spellcastingBonus":
-            this.statistics[statName] += quality[statName];
+          case "spellcastingModifier":
+          case "baseValueModifier":
+          case "purchaseLimitModifier":
+            this.statistics[statName] += parseFloat(quality[statName]);
             break;
-          case "baseValueBonus":
-            this.statistics[statName] += this.baseValue * quality[statName];
+            /* this.statistics[statName] += parseFloat(this.baseValue) * parseFloat(quality[statName]);
             break;
-          case "purchaseLimitBonus":
-            this.statistics[statName] += this.purchaseLimit * quality[statName];
-            break;
+            this.statistics[statName] += parseFloat(this.purchaseLimit) * parseFloat(quality[statName]);
+            break; */
         }
       })
     });
   }
 
-  getGovernments = () => {
-    return this.getQualities(Type.GOVERNMENT);
-  }
-
   setAlignment = (alignment) => {
     this.alignment = alignment;
-  }
-
-  getAlignment = () => {
-    return this.alignment;
   }
 
   applyAlignment = () => {
@@ -200,11 +196,7 @@ export class Settlement {
   }
 
   setSize = (size) => {
-    this.size = size;
-  };
-
-  getSize = () => {
-    return this.size;
+    this.size = parseInt(size);
   };
 
   applySize = () => {
@@ -225,39 +217,39 @@ export class Settlement {
     })
 
     this.statistics.danger = this.table.dangers[this.size];
-    this.statistics.spellcastingBonus = this.size;
 
-    this.selectedQualityNumber = this.table.qualitiesValues[this.size];
-    this.baseValue = this.table.baseValues[this.size];
-    this.purchaseLimit = this.table.purchaseLimits[this.size];
+    this.baseValue = parseInt(this.table.baseValues[this.size]);
+    this.purchaseLimit = parseInt(this.table.purchaseLimits[this.size]);
   }
 
-  setSpellcasting = () => {
-
-  }
-
-  getSpellcasting = () => {
-
-  }
-
-  applySpellcasting = () => {
-    // Cap if above 9th level
-    if (this.statistics.spellcastingBonus > this.table.spellcastingIndexes.length) {
-      this.statistics.spellcastingBonus = this.table.spellcastingIndexes.length;
-    }
-
+  applySpellcastingAndFinance = () => {
     // Raise to minimum 0
-    if (this.statistics.spellcastingBonus < 0) {
-      this.statistics.spellcastingBonus = 0;
+    if (this.statistics.spellcastingModifier < 0) {
+      this.statistics.spellcastingModifier = 0;
     }
 
-    this.spellcastingMax = this.table.spellcastingIndexes[this.statistics.spellcastingBonus];
-    this.purchaseLimitTotal = this.purchaseLimit + this.statistics.purchaseLimitBonus;
-    this.baseValueTotal = this.baseValue + this.statistics.baseValueBonus;
+    const magicSize = Math.min(Math.max(parseInt(parseInt(this.statistics.spellcastingModifier)) + parseInt(this.size),0),this.table.spellcastingIndexes.length-1);
 
-    this.minorItems = this.table.magicItemsBySpellcasting[this.size + 4];
-    this.mediumItems = this.table.magicItemsBySpellcasting[this.size + 2];
-    this.majorItems = this.table.magicItemsBySpellcasting[this.size + 0];
+    /* console.log('---');
+    console.log('size',this.size);
+    console.log('magicSize',magicSize);
+    console.log('---');
+    console.log('spellcastingModifier',this.statistics.spellcastingModifier);
+    console.log('baseValueModifier',this.statistics.baseValueModifier);
+    console.log('purchaseLimitModifier',this.statistics.purchaseLimitModifier); */
+
+    this.spellcastingMax = this.table.spellcastingIndexes[magicSize];
+    this.baseValueTotal = parseFloat(this.baseValue) + (parseFloat(this.baseValue) * parseFloat(this.statistics.baseValueModifier));
+    this.purchaseLimitTotal = parseFloat(this.purchaseLimit) + (parseFloat(this.purchaseLimit) * parseFloat(this.statistics.purchaseLimitModifier));
+
+    /* console.log('---');
+    console.log('spellcastingMax',this.spellcastingMax);
+    console.log('baseValueTotal',this.baseValueTotal);
+    console.log('purchaseLimitTotal',this.purchaseLimitTotal); */
+
+    this.minorItems = this.table.magicItemsBySpellcasting[magicSize + 4];
+    this.mediumItems = this.table.magicItemsBySpellcasting[magicSize + 2];
+    this.majorItems = this.table.magicItemsBySpellcasting[magicSize + 0];
   }
 
   fillQualities = () => {
@@ -270,7 +262,7 @@ export class Settlement {
     this.applySize();
     this.applyAlignment();
     this.applyQualities();
-    this.applySpellcasting();
+    this.applySpellcastingAndFinance();
   }
 
   getProperties = (array, property) => {
@@ -282,23 +274,9 @@ export class Settlement {
   }
 
   render = () => {
-    /*
-    <p>
-    <b>Base value:</b> ${this.baseValueTotal};
-    <b>Purchase limit:</b> ${this.purchaseLimitTotal};
-    <b>Highest spell level:</b> ${this.spellcastingMax};
-    </p>
-    <p>
-    <b>Minor items</b> ${this.minorItems};
-    <b>Medium items</b> ${this.mediumItems};
-    <b>Major items</b> ${this.majorItems};
-    </p>`;
-    */
-
     document.querySelector('#alignment').innerHTML = this.alignment
-    document.querySelector('#type').innerHTML = this.type + ' (' + this.size + ')'
+    document.querySelector('#type').innerHTML = this.type;
     document.querySelector('#population-range').innerHTML = this.table.populationValues[this.size];
-
     document.querySelector('#short-government').innerHTML = this.getProperties(this.selectedGovernments, 'name').join(', ');
 
     let qualitiesHtml = '';
@@ -311,19 +289,16 @@ export class Settlement {
       document.querySelector('#' + statName + '-score' ).innerHTML = this.statistics[statName];
     });
 
+    document.querySelector('#spellcastingTotal').innerHTML = this.spellcastingMax + '*';
+    document.querySelector('#baseValueTotal').innerHTML = this.baseValueTotal;
+    document.querySelector('#purchaseLimitTotal').innerHTML = this.purchaseLimitTotal;
+
     let cardList = new CardList(this);
     cardList.printSelectedGovernments();
     cardList.printSelectedQualities();
 
     cardList.printAvailableGovernments();
     cardList.printAvailableQualities();
-
-
-
-    /*
-    this.selectedGovernmentNotes = [...this.selectedGovernmentNotes, ...quality["notes"]];
-    this.selectedQualityNotes = [...this.selectedQualityNotes, ...quality["notes"]];
-    */
 
     this.renderWiki();
   }
@@ -377,17 +352,17 @@ export class Settlement {
       this.table.statistics.forEach(stat => {
         if (quality[stat] != 0) {
           switch (stat) {
-            case 'spellcastingBonus':
-            let spellcastingBonus = quality[stat] <= 0 ? `decrease spellcasting by ${quality[stat]} level(s)`  : `increase spellcasting by ${quality[stat]} level(s)`
-            html += 'Spellcasting: ' + spellcastingBonus + '; ';
+            case 'spellcastingModifier':
+            let spellcastingModifier = quality[stat] <= 0 ? `decrease spellcasting by ${quality[stat]} level(s)`  : `increase spellcasting by ${quality[stat]} level(s)`
+            html += 'Spellcasting: ' + spellcastingModifier + '; ';
             break;
-            case 'baseValueBonus':
-            let baseValueBonus = quality[stat] <= 0 ? `decrease by ${quality[stat] * 100}%` : `increase by ${quality[stat] * 100}%`
-            html += 'Base value: ' + baseValueBonus + '; ';
+            case 'baseValueModifier':
+            let baseValueModifier = quality[stat] <= 0 ? `decrease by ${quality[stat] * 100}%` : `increase by ${quality[stat] * 100}%`
+            html += 'Base value: ' + baseValueModifier + '; ';
             break;
-            case 'purchaseLimitBonus':
-            let purchaseLimitBonus = quality[stat] <= 0 ? `decrease by ${quality[stat] * 100}%` : `increase by ${quality[stat] * 100}%`
-            html += 'Purchase limit: ' + purchaseLimitBonus + '; ';
+            case 'purchaseLimitModifier':
+            let purchaseLimitModifier = quality[stat] <= 0 ? `decrease by ${quality[stat] * 100}%` : `increase by ${quality[stat] * 100}%`
+            html += 'Purchase limit: ' + purchaseLimitModifier + '; ';
             break;
             default:
             let genericBonus = quality[stat] <= 0 ? quality[stat] : '+' + quality[stat];

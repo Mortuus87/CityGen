@@ -63,15 +63,49 @@ export class CardList {
       }
     });
     return array;
-};
+  };
+
+  getStatistics = (quality) => {
+    let names = [];
+    this.settlement.table.statistics.forEach((name) => {
+      if (quality[name] !== 0) {
+        switch (name) {
+          case "corruption":
+          case "crime":
+          case "economy":
+          case "law":
+          case "lore":
+          case "society":
+          case "danger":
+            names.push(name + ' ' + quality[name]);
+            break;
+          case "spellcastingModifier":
+            names.push('spellcasting bonus ' + quality[name]);
+            break;
+          case "baseValueModifier":
+            names.push('base value bonus ' + quality[name]);
+            break;
+          case "purchaseLimitModifier":
+            names.push('purchase limit bonus ' + quality[name]);
+            break;
+        }
+      }
+    })
+
+    return names;
+  }
 
   getCard = (quality, operation) => {
+    const tags = this.getStatistics(quality);
+    const tagsHtml = tags.length ? `<ul><li class="tag">${tags.join('</li><li>')}</li></ul>` : ``;
+
     return `
     <div class="card" id="${quality.uid}">
       <div class="card-body">
         <div class="row">
           <div class="col-12">
             <h3>${quality.name}</h3>
+            ${tagsHtml}
             <a class="quality-control" data-type="${quality.type}" data-uid="${quality.uid}" data-operation="${operation}">${operation}</a>
           </div>
           <div class="col-12">

@@ -4,6 +4,8 @@ import data from '../json/settlement.json' with { type: 'json' };
 
 function init() {
   const settlement = new Settlement(data);
+  settlement.reset();
+  generate(settlement);
   update(settlement);
 
   document.querySelector('#updateBtn').addEventListener('click', (e) => {

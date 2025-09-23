@@ -15,13 +15,13 @@ export class Qualities {
         if (quality[stat] != 0) {
           quality[stat] = quality[stat] <= 0 ? quality[stat] : '+'+quality[stat]
           switch (stat) {
-            case 'spellcastingBonus':
+            case 'spellcastingModifier':
             html += 'Spellcasting';
             break;
-            case 'baseValueBonus':
+            case 'baseValueModifier':
             html += 'Base value';
             break;
-            case 'purchaseLimitBonus':
+            case 'purchaseLimitModifier':
             html += 'Purchase limit';
             break;
             default:
