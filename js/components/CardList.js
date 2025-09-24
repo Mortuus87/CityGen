@@ -35,7 +35,7 @@ export class CardList {
     let html = '';
     let qualities = this.sortByName(this.settlement.selectedQualities);
     qualities.forEach((quality) => {
-      html += this.getCard(quality, Operation.TO_AVAILABLE);
+      html += this.getCompactCard(quality, Operation.TO_AVAILABLE);
     });
 
     document.querySelector("#selected-qualities").innerHTML = html;
@@ -46,7 +46,7 @@ export class CardList {
     let html = '';
     let governments = this.sortByName(this.settlement.selectedGovernments);
     governments.forEach((government) => {
-      html += this.getCard(government, Operation.TO_AVAILABLE);
+      html += this.getCompactCard(government, Operation.TO_AVAILABLE);
     });
 
     document.querySelector("#selected-governments").innerHTML = html;
@@ -97,23 +97,46 @@ export class CardList {
 
   getCard = (quality, operation) => {
     const tags = this.getStatistics(quality);
-    const tagsHtml = tags.length ? `<ul><li class="tag">${tags.join('</li><li>')}</li></ul>` : ``;
+    const tagsHtml = tags.length ? `<ul class="tag-list"><li>${tags.join('</li><li>')}</li></ul>` : ``;
 
     return `
-    <div class="card" id="${quality.uid}">
-      <div class="card-body">
+    <div class="card default" id="${quality.uid}">
         <div class="row">
           <div class="col-12">
-            <h3>${quality.name}</h3>
-            ${tagsHtml}
-            <a class="quality-control" data-type="${quality.type}" data-uid="${quality.uid}" data-operation="${operation}">${operation}</a>
+            <div class="card-header">
+              <h3>${quality.name}</h3>
+              <div class="controls">
+                <a class="quality-control" data-type="${quality.type}" data-uid="${quality.uid}" data-operation="${operation}">${operation === Operation.TO_SELECTED ? '<i class="fas fa-plus-circle"></i>' : '<i class="fas fa-minus-circle"></i>'}</a>
+              </div>
+            </div>
           </div>
           <div class="col-12">
-            <details>
-              <summary>Read more</summary>
-              ${quality.notes}
-            </details>
+            <div class="card-body">
+              <details>
+                <summary>Read more</summary>
+                ${tagsHtml}
+                ${quality.notes}
+              </details>
           </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  getCompactCard = (quality, operation) => {
+    const tags = this.getStatistics(quality);
+    const tagsHtml = tags.length ? `<ul class="tag-list"><li>${tags.join('</li><li>')}</li></ul>` : ``;
+
+    return `
+    <div class="card compact" id="${quality.uid}">
+      <div class="card-body">
+        <details>
+          <summary>${quality.name}</summary>
+          ${tagsHtml}
+          ${quality.notes}
+        </details>
+        <div class="controls">
+          <a class="quality-control" data-type="${quality.type}" data-uid="${quality.uid}" data-operation="${operation}">${operation === Operation.TO_SELECTED ? '<i class="fas fa-plus-circle"></i>' : '<i class="fas fa-minus-circle"></i>'}</a>
         </div>
       </div>
     </div>`;
@@ -125,13 +148,15 @@ export class CardList {
       <div class="row">
         <div class="col-12">
           <h3>${quality.name}</h3>
-          <a class="${quality.type}" data-uid="${quality.uid}" data-operation="${operation}">${operation}</a>
         </div>
         <div class="col-12">
           <details>
             <summary>Read more</summary>
             ${quality.notes}
           </details>
+          <div class="controls">
+            <a class="${quality.type}" data-uid="${quality.uid}" data-operation="${operation}">${operation}</a>
+          </div>
         </div>
       </div>
     </div>

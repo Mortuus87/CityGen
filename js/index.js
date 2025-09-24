@@ -58,6 +58,7 @@ function update(settlement) {
   // At this point the old event listeners should have been cleared, since the html has been redrawn, and the DOM has been thuroughly discombobulated.
   document.querySelectorAll('.quality-control').forEach(element => {
     element.addEventListener('click', (e) => {
+      console.log(e.target);
       const dataset = e.target.dataset;
       settlement.moveQuality(dataset.uid, dataset.type, dataset.operation)
       update(settlement);

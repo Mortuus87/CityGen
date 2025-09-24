@@ -25,11 +25,10 @@ export class Settlement {
 
     this.availableQualities   = this.table.qualities;
     this.selectedQualities    = [];
-    this.selectedQualityNotes = [];
 
     this.availableGovernments    = this.table.governments;
     this.selectedGovernments     = [];
-    this.selectedGovernmentNotes = [];
+
 
     this.minorItems  = "";
     this.mediumItems = "";
@@ -38,7 +37,6 @@ export class Settlement {
     this.baseValueTotal = 0;
     this.purchaseLimitTotal = 0;
     this.spellcastingMax = "-";
-
   }
 
   reset = () => {
@@ -61,11 +59,9 @@ export class Settlement {
   resetQualities = () => {
     this.availableQualities   = [...this.availableQualities, ...this.selectedQualities];
     this.selectedQualities    = [];
-    this.selectedQualityNotes = [];
 
     this.availableGovernments    = [...this.availableGovernments, ...this.selectedGovernments];
     this.selectedGovernments     = [];
-    this.selectedGovernmentNotes = [];
   }
 
   resetStatistics = () => {
@@ -82,7 +78,7 @@ export class Settlement {
   }
 
   moveQuality = (uid, type, direction) => {
-    // console.log('moving', uid, 'to', direction);
+    console.log('moving', uid, 'to', direction);
     if (type === Type.GOVERNMENT) {
       if (direction === Operation.TO_SELECTED) {
         // move from available to selected
@@ -100,6 +96,7 @@ export class Settlement {
         });
       }
     } else if (type === Type.QUALITY) {
+      console.log(this.selectedQualities);
       // assume quality
       if (direction === Operation.TO_SELECTED) {
         // move from available to selected
@@ -116,6 +113,7 @@ export class Settlement {
           }
         });
       }
+      console.log(this.selectedQualities);
     }
   }
 
@@ -247,9 +245,9 @@ export class Settlement {
     console.log('baseValueTotal',this.baseValueTotal);
     console.log('purchaseLimitTotal',this.purchaseLimitTotal); */
 
-    this.minorItems = this.table.magicItemsBySpellcasting[magicSize + 4];
-    this.mediumItems = this.table.magicItemsBySpellcasting[magicSize + 2];
-    this.majorItems = this.table.magicItemsBySpellcasting[magicSize + 0];
+    this.minorItems = this.table.magicItemsBySpellcasting[Math.min(magicSize + 4, 11)];
+    this.mediumItems = this.table.magicItemsBySpellcasting[Math.min(magicSize + 2, 11)];
+    this.majorItems = this.table.magicItemsBySpellcasting[Math.min(magicSize + 0, 11)];
   }
 
   fillQualities = () => {
@@ -293,6 +291,12 @@ export class Settlement {
     document.querySelector('#baseValueTotal').innerHTML = this.baseValueTotal;
     document.querySelector('#purchaseLimitTotal').innerHTML = this.purchaseLimitTotal;
 
+    document.querySelector('#minorItems').innerHTML = this.minorItems;
+    document.querySelector('#mediumItems').innerHTML = this.mediumItems;
+    document.querySelector('#majorItems').innerHTML = this.majorItems;
+
+    document.querySelector('#applied-details').innerHTML = this.getProperties(this.selectedGovernments, 'notes').join('</p><p>') + '</p><p>' + this.getProperties(this.selectedQualities, 'notes').join('</p><p>');
+
     let cardList = new CardList(this);
     cardList.printSelectedGovernments();
     cardList.printSelectedQualities();
@@ -330,11 +334,13 @@ export class Settlement {
   printModifiers = (qualities, wikiMode = true) => {
     let html = '';
 
+    /*
     if (wikiMode) {
       html += ``;
     } else {
       html += ``;
     }
+    */
 
     qualities.forEach(quality => {
       html += `<div class="quality">`;

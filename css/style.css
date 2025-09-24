@@ -9928,18 +9928,67 @@ h3 {
     border-color: #dee2e6;
   }
 }
+.main {
+  background-color: #3b3b3b;
+  color: #fff;
+}
+
 .popper:hover + .popup, .popper:focus + .popup {
   display: block;
   position: absolute;
-  background-color: white;
-  border: 1px solid gray;
+  background-color: #3b3b3b;
+  border: 1px solid #707070;
   z-index: 1;
   padding: 6px 8px 8px;
   border-radius: 4px;
+  width: 100%;
 }
 .popper + .popup {
   display: none;
   margin-right: 20px;
+}
+
+.nav.nav-tabs .nav-link {
+  background-color: #2e2e2e;
+  color: #fff;
+}
+.nav.nav-tabs .nav-link.active {
+  background-color: #3b3b3b;
+  border: none;
+}
+
+.card {
+  border-radius: 0;
+  background-color: #3b3b3b;
+  border: 1px solid #707070;
+  box-shadow: 0px 15px -5px rgba(0, 0, 0, 0.5);
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+.card .controls a {
+  color: #fff;
+}
+.card .controls a.quality-control {
+  cursor: pointer;
+}
+.card .controls a.quality-control i {
+  pointer-events: none;
+}
+.card ul.tag-list {
+  padding: 0;
+}
+.card ul.tag-list li {
+  list-style: none;
+  font-size: 0.875rem;
+  background-color: #111;
+}
+.card.compact .card-body {
+  display: flex;
+  justify-content: space-between;
+}
+.card.default .card-header {
+  display: flex;
+  justify-content: space-between;
 }
 
 /*# sourceMappingURL=style.css.map */

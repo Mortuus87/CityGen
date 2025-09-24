@@ -5,16 +5,73 @@
     &+.popup {
       display: block;
       position: absolute;
-      background-color: white;
-      border: 1px solid gray;
+      background-color: $dark;
+      border: 1px solid #707070;
       z-index: 1;
       padding: 6px 8px 8px;
       border-radius: 4px;
+      width: 100%;
     }
   }
   &+.popup {
     display: none;
     margin-right: 20px;
+  }
+}
+
+.nav.nav-tabs {
+  .nav-link{
+    background-color: $darker;
+    color:$lightest;
+    &.active {
+      background-color: $dark;
+      border: none;
+    }
+  }
+}
+
+.card {
+  border-radius: 0;
+  background-color: $dark;
+  border: 1px solid #707070;
+  box-shadow: 0px 15px -5px rgba(0,0,0,0.5);
+  position: relative;
+  margin-bottom: .5rem;
+
+  .controls {
+    a {
+      color: $lightest;
+    }
+
+    a.quality-control {
+      cursor: pointer;
+      i {
+        pointer-events: none;
+      }
+    }
+  }
+
+  ul.tag-list {
+    padding: 0;
+    li {
+      list-style: none;
+      font-size: .875rem;
+      background-color: $darkest;
+    }
+  }
+
+  &.compact {
+    .card-body {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  &.default {
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 }
 
