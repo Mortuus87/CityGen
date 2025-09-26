@@ -1,10 +1,10 @@
 {
-  "name": "ma3",
+  "name": "settlement-generator",
   "version": "1.0.0",
   "description": "",
-  "main": "js/index.js",
+  "main": "assets/js/index.js",
   "scripts": {
-    "watch": "sass --watch scss/style.scss css/style.css",
+    "watch": "sass --watch assets/scss/style.scss build/css/style.css",
     "build": "webpack"
   },
   "author": "Morten Hallgren",

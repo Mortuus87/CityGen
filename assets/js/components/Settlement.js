@@ -1,7 +1,7 @@
 import { roll } from "./rollArray.js";
 import { CardList } from "./CardList.js";
 
-const Type = {
+export const Type = {
   GOVERNMENT: 'government',
   QUALITY: 'quality',
 }
@@ -9,6 +9,7 @@ const Type = {
 export const Operation = {
   TO_SELECTED: 'add',
   TO_AVAILABLE: 'remove',
+  REROLL: 'reroll'
 }
 
 /**
@@ -60,8 +61,8 @@ export class Settlement {
     this.availableQualities   = [...this.availableQualities, ...this.selectedQualities];
     this.selectedQualities    = [];
 
-    this.availableGovernments    = [...this.availableGovernments, ...this.selectedGovernments];
-    this.selectedGovernments     = [];
+    this.availableGovernments = [...this.availableGovernments, ...this.selectedGovernments];
+    this.selectedGovernments  = [];
   }
 
   resetStatistics = () => {
@@ -78,7 +79,6 @@ export class Settlement {
   }
 
   moveQuality = (uid, type, direction) => {
-    console.log('moving', uid, 'to', direction);
     if (type === Type.GOVERNMENT) {
       if (direction === Operation.TO_SELECTED) {
         // move from available to selected
@@ -96,7 +96,6 @@ export class Settlement {
         });
       }
     } else if (type === Type.QUALITY) {
-      console.log(this.selectedQualities);
       // assume quality
       if (direction === Operation.TO_SELECTED) {
         // move from available to selected
@@ -113,7 +112,6 @@ export class Settlement {
           }
         });
       }
-      console.log(this.selectedQualities);
     }
   }
 
@@ -128,6 +126,23 @@ export class Settlement {
       });
     }
   }
+
+  addRandomQuality = (type) => {
+    let qualities = [];
+    switch (type) {
+      case Type.GOVERNMENT:
+        qualities = roll(this.availableGovernments, 1)
+        break;
+      case Type.QUALITY:
+        qualities = roll(this.availableQualities, 1)
+        break;
+      }
+
+      qualities.forEach(quality => {
+        this.moveQuality(quality.uid, type, Operation.TO_SELECTED)
+      });
+
+    }
 
   getQualities = (mode = Type.QUALITY) => {
     if (mode === Type.GOVERNMENT) {
@@ -157,10 +172,6 @@ export class Settlement {
           case "purchaseLimitModifier":
             this.statistics[statName] += parseFloat(quality[statName]);
             break;
-            /* this.statistics[statName] += parseFloat(this.baseValue) * parseFloat(quality[statName]);
-            break;
-            this.statistics[statName] += parseFloat(this.purchaseLimit) * parseFloat(quality[statName]);
-            break; */
         }
       })
     });
@@ -228,22 +239,9 @@ export class Settlement {
 
     const magicSize = Math.min(Math.max(parseInt(parseInt(this.statistics.spellcastingModifier)) + parseInt(this.size),0),this.table.spellcastingIndexes.length-1);
 
-    /* console.log('---');
-    console.log('size',this.size);
-    console.log('magicSize',magicSize);
-    console.log('---');
-    console.log('spellcastingModifier',this.statistics.spellcastingModifier);
-    console.log('baseValueModifier',this.statistics.baseValueModifier);
-    console.log('purchaseLimitModifier',this.statistics.purchaseLimitModifier); */
-
     this.spellcastingMax = this.table.spellcastingIndexes[magicSize];
     this.baseValueTotal = parseFloat(this.baseValue) + (parseFloat(this.baseValue) * parseFloat(this.statistics.baseValueModifier));
     this.purchaseLimitTotal = parseFloat(this.purchaseLimit) + (parseFloat(this.purchaseLimit) * parseFloat(this.statistics.purchaseLimitModifier));
-
-    /* console.log('---');
-    console.log('spellcastingMax',this.spellcastingMax);
-    console.log('baseValueTotal',this.baseValueTotal);
-    console.log('purchaseLimitTotal',this.purchaseLimitTotal); */
 
     this.minorItems = this.table.magicItemsBySpellcasting[Math.min(magicSize + 4, 11)];
     this.mediumItems = this.table.magicItemsBySpellcasting[Math.min(magicSize + 2, 11)];
@@ -276,12 +274,7 @@ export class Settlement {
     document.querySelector('#type').innerHTML = this.type;
     document.querySelector('#population-range').innerHTML = this.table.populationValues[this.size];
     document.querySelector('#short-government').innerHTML = this.getProperties(this.selectedGovernments, 'name').join(', ');
-
-    let qualitiesHtml = '';
-    this.getProperties(this.selectedQualities, 'name').forEach(qualityName => {
-      qualitiesHtml += `<li>${qualityName}</li>`;
-    });
-    document.querySelector('#short-qualities').innerHTML = qualitiesHtml;
+    document.querySelector('#short-qualities').innerHTML = this.getProperties(this.selectedQualities, 'name').join(', ');
 
     ["corruption","crime","economy","law","lore","society","danger"].forEach(statName => {
       document.querySelector('#' + statName + '-score' ).innerHTML = this.statistics[statName];
@@ -333,14 +326,6 @@ export class Settlement {
 
   printModifiers = (qualities, wikiMode = true) => {
     let html = '';
-
-    /*
-    if (wikiMode) {
-      html += ``;
-    } else {
-      html += ``;
-    }
-    */
 
     qualities.forEach(quality => {
       html += `<div class="quality">`;

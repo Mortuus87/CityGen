@@ -1,6 +1,7 @@
-@import "../node_modules/bootstrap/scss/bootstrap";
-
 @import "./base/variables";
+
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
 @import "./base/global";
 
 @import "./components/main";

@@ -1,6 +1,6 @@
-import { Settlement } from "./components/Settlement.js";
+import { Operation, Settlement } from "./components/Settlement.js";
 import { roll as rollArray } from "./components/rollArray.js";
-import data from '../json/settlement.json' with { type: 'json' };
+import data from '../resources/json/settlement.json' with { type: 'json' };
 
 function init() {
   const settlement = new Settlement(data);
@@ -12,6 +12,26 @@ function init() {
     e.preventDefault();
     settlement.reset();
     generate(settlement);
+    update(settlement);
+  });
+
+  document.querySelector('#selectSize').addEventListener('change', (e) => {
+    e.preventDefault();
+    let selectedSize = e.target.value;
+    if (selectedSize !== 'any') {
+      settlement.setSize(selectedSize);
+    };
+
+    update(settlement);
+  });
+
+  document.querySelector('#selectAlignment').addEventListener('change', (e) => {
+    e.preventDefault();
+    let selectedAlignment = e.target.value;
+    if (selectedAlignment !== 'any') {
+      settlement.setAlignment(selectedAlignment);
+    };
+
     update(settlement);
   });
 }
@@ -58,9 +78,19 @@ function update(settlement) {
   // At this point the old event listeners should have been cleared, since the html has been redrawn, and the DOM has been thuroughly discombobulated.
   document.querySelectorAll('.quality-control').forEach(element => {
     element.addEventListener('click', (e) => {
-      console.log(e.target);
       const dataset = e.target.dataset;
-      settlement.moveQuality(dataset.uid, dataset.type, dataset.operation)
+      switch (dataset.operation) {
+        case Operation.TO_AVAILABLE:
+        case Operation.TO_SELECTED:
+          settlement.moveQuality(dataset.uid, dataset.type, dataset.operation)
+          break;
+        case Operation.REROLL:
+          console.log('reroll clicked');
+          settlement.moveQuality(dataset.uid, dataset.type, Operation.TO_AVAILABLE);
+          settlement.addRandomQuality(dataset.type);
+        default:
+          break;
+      }
       update(settlement);
     });
   });

@@ -1,0 +1,136 @@
+.updateBtn-wrapper {
+  display: flex;
+  height: 100%;
+
+  #updateBtn {
+    width: 100%;
+    margin-top: auto;
+    padding: 4px 8px;
+    margin-bottom: 1rem;
+    font-size: .875rem;
+
+    i {
+      margin-right: .5rem;
+    }
+  }
+}
+
+.popper {
+  &:hover,
+  &:focus {
+    &+.popup {
+      display: block;
+      position: absolute;
+      background-color: $dark;
+      border: 1px solid #707070;
+      z-index: 1;
+      padding: 6px 8px 8px;
+      border-radius: 4px;
+      width: 100%;
+    }
+  }
+  &+.popup {
+    display: none;
+    margin-right: 20px;
+  }
+}
+
+.nav.nav-tabs {
+  border: none;
+  .nav-link{
+    background-color: $darker;
+    color:$lightest;
+    &.active {
+      background-color: $dark;
+      border: none;
+    }
+  }
+}
+
+ul.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem .25rem;
+  margin-bottom: .5rem;
+  padding: 0;
+
+  li {
+    background-color: $darker;
+    font-size: .875rem;
+    list-style: none;
+    padding: .125rem .3rem;
+    border: 1px solid $light;
+  }
+}
+
+.settlement-statistics {
+  #short-qualities,
+  .spells-and-commerce,
+  .magic-items {
+    padding: 0;
+    li {list-style: none;}
+  }
+}
+
+.card {
+  border-radius: 0;
+  background-color: $dark;
+  border: 1px solid $light;
+  box-shadow: 0px 15px -5px rgba(0,0,0,0.5);
+  position: relative;
+  margin-bottom: .5rem;
+
+  .controls {
+    a {
+      color: $lightest;
+    }
+
+    a.quality-control {
+      cursor: pointer;
+      i {
+        pointer-events: none;
+      }
+    }
+  }
+
+  details {
+    width: 100%;
+    &:not([open]) {
+
+      &:hover,
+      &:active,
+      &:focus {
+        summary {
+          >span {
+            color: $primary;
+          }
+        }
+      }
+    }
+  }
+
+  &.compact {
+    .card-body {
+      display: flex;
+      justify-content: space-between;
+      padding: .25rem .875rem .3rem;
+
+      .controls {
+        display: flex;
+        gap: .2rem .5rem;
+      }
+    }
+
+    &.empty {
+      border-style: dashed;
+    }
+  }
+
+  &.default {
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="build/css/style.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
     integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
   <title>City Generator</title>
@@ -16,7 +16,14 @@
     <div class="container">
       <form class="">
         <div class="row">
-          <div class="col-6">
+
+          <div class="col-12 col-md-4 col-lg-2">
+            <div class="updateBtn-wrapper">
+              <button id="updateBtn" class="btn btn-primary"><i class="fas fa-dice"></i>Reroll</button>
+            </div>
+          </div>
+
+          <div class="col-6 col-md-4 col-lg-5">
             <div class="form-group row">
               <label for="selectSize" class="col-12">Size</label>
               <div class="col-12">
@@ -34,7 +41,7 @@
               </div>
             </div>
           </div>
-          <div class="col-6">
+          <div class="col-6 col-md-4 col-lg-5">
             <div class="form-group row">
               <label for="selectAlignment" class="col-12">Alignment</label>
               <div class="col-12">
@@ -53,22 +60,16 @@
               </div>
             </div>
           </div>
-          <div class="col-12">
-            <div class="form-group row">
-              <div class="col-12">
-                <button id="updateBtn" class="btn btn-primary">Generate</button>
-              </div>
-            </div>
-          </div>
+
+
         </div>
 
         <div class="row">
-
           <div class="col-12">
-            <h2>Name</h2>
+            <h2>Settlement</h2>
           </div>
 
-          <div class="col-12 col-md-8">
+          <div class="col-12 col-md-8 settlement-statistics">
             <div class="row">
 
               <div class="col-12 col-sm-8">
@@ -90,19 +91,17 @@
                 <span id="type">???</span>
                 <p><b>Population:</b> <span id="population-range"></span></p>
                 <p><b>Government:</b> <span id="short-government"></span></p>
-                <p><b>Qualities:</b>
-                  <ul id="short-qualities"></ul>
-                </p>
+                <p><b>Qualities:</b> <span id="short-qualities"></span></p>
 
                 <p><b>Magic and commerce</b></p>
-                <ul>
+                <ul class="spells-and-commerce">
                   <li><b>Spellcasting total: </b><span id="spellcastingTotal"></span></li>
                   <li><b>Base value total: </b><span id="baseValueTotal"></span></li>
                   <li><b>Purchase limit total: </b><span id="purchaseLimitTotal"></span></li>
                 </ul>
 
                 <p><b>Magic items</b></p>
-                <ul>
+                <ul class="magic-items">
                   <li><b>Minor items: </b><span id="minorItems"></li>
                   <li><b>Medium items: </b><span id="mediumItems"></li>
                   <li><b>Major items: </b><span id="majorItems"></li>
@@ -138,11 +137,6 @@
                   <span class="popper"><b>Danger</b> <span id="danger-score">?</span></span>
                   <span class="popup">A settlement’s danger value is a number that gives a general idea of how dangerous it is to live in the settlement. A settlement’s base danger value depends on its type.</span>
                 </div>
-
-                <br>
-                <p>
-                  TODO: roll the number of items.
-                </p>
               </div>
 
               <div class="col-12">
@@ -191,19 +185,12 @@
             <div class="tab-content" id="nav-tabContent">
               <div class="tab-pane fade show active" id="nav-governments" role="tabpanel" aria-labelledby="nav-governments-tab">
                 <div class="governments">
-                  <h2>
-                    All Governments
-                  </h2>
                   <div id="available-governments">
                     <!-- Generated -->
                   </div>
                 </div>
               </div>
               <div class="tab-pane fade" id="nav-qualities" role="tabpanel" aria-labelledby="nav-qualities-tab">
-                <div class="qualities">
-                  <h2>
-                    All Qualities
-                  </h2>
                   <div id="available-qualities">
                     <!-- Generated -->
                   </div>
@@ -211,12 +198,10 @@
               </div>
               <div class="tab-pane fade" id="nav-wiki" role="tabpanel" aria-labelledby="nav-wiki-tab">
                 <div class="wiki-template">
-                  <h2>
-                    Wiki template
-                  </h2>
                   <div id="template">
                     <!-- Generated -->
                   </div>
+                  <input type="text" name="wiki-template" id="wiki-template" />
                 </div>
               </div>
             </div>
@@ -231,7 +216,7 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/index.js" type="module" crossorigin=""></script>
+<script src="assets/js/index.js" type="module" crossorigin=""></script>
 </body>
 
 </html>
