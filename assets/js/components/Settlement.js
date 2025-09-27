@@ -290,7 +290,22 @@ export class Settlement {
 
     let cardList = new CardList(this);
     cardList.printSelectedGovernments();
+    let governmentCount = document.querySelector('#governmentCount');
+    governmentCount.innerHTML = '(' + this.selectedGovernments.length + '/1)';
+    if (this.selectedGovernments.length > 1) {
+      governmentCount.classList.add('error');
+    } else {
+      governmentCount.classList.remove('error');
+    }
+
     cardList.printSelectedQualities();
+    let qualityCount = document.querySelector('#qualityCount');
+    qualityCount.innerHTML = '(' + this.selectedQualities.length + '/' + this.table.qualitiesValues[this.size] + ')';
+    if (this.selectedQualities.length > this.table.qualitiesValues[this.size]) {
+      qualityCount.classList.add('error');
+    } else {
+      qualityCount.classList.remove('error');
+    }
 
     cardList.printAvailableGovernments();
     cardList.printAvailableQualities();
