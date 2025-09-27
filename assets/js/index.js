@@ -8,8 +8,13 @@ function init() {
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
+
+  // Get a different table of data if the parameter ?setting=orn is present.
   if (urlParams.get('setting') === 'orn') {
     json = ornJson;
+  } else {
+    // Hide controller for wiki template when not used in homebrew context
+    document.querySelector('#nav-wiki-tab').style.display = "none";
   }
 
   document.querySelector('#name').innerHTML = json.source;
