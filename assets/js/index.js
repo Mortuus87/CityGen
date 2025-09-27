@@ -1,9 +1,20 @@
 import { Operation, Settlement } from "./components/Settlement.js";
 import { roll as rollArray } from "./components/rollArray.js";
-import data from '../resources/json/settlement.json' with { type: 'json' };
+import settlementJson from '../resources/json/settlement.json' with { type: 'json' };
+import ornJson from '../resources/json/orn.json' with { type: 'json' };
 
 function init() {
-  const settlement = new Settlement(data);
+  let json = settlementJson;
+
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  if (urlParams.get('setting') === 'orn') {
+    json = ornJson;
+  }
+
+  document.querySelector('#name').innerHTML = json.source;
+
+  const settlement = new Settlement(json);
   settlement.reset();
   generate(settlement);
   update(settlement);
@@ -53,12 +64,12 @@ init();
 function generate(settlement) {
   let selectedSize = document.querySelector('#selectSize').value;
   if (selectedSize === 'any') {
-    selectedSize = rollArray(data.sizes)
+    selectedSize = rollArray(settlement.table.sizes)
   };
 
   let selectedAlignment = document.querySelector('#selectAlignment').value;
   if (selectedAlignment === 'any') {
-    selectedAlignment = rollArray(data.alignments)[0]
+    selectedAlignment = rollArray(settlement.table.alignments)[0]
   };
 
   /* Setters */

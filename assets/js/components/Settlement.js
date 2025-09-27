@@ -119,9 +119,7 @@ export class Settlement {
   setQualities = (qualities, mode = Type.QUALITY) => {
     if (mode === Type.GOVERNMENT) {
       qualities.forEach(quality => {
-        console.log(this.selectedGovernments);
         this.moveQuality(quality.uid, Type.GOVERNMENT, Operation.TO_SELECTED);
-        console.log(this.selectedGovernments);
       });
     } else if (mode === Type.QUALITY) {
       qualities.forEach(quality => {
@@ -242,9 +240,9 @@ export class Settlement {
     this.baseValueTotal = parseFloat(this.baseValue) + (parseFloat(this.baseValue) * parseFloat(this.statistics.baseValueModifier));
     this.purchaseLimitTotal = parseFloat(this.purchaseLimit) + (parseFloat(this.purchaseLimit) * parseFloat(this.statistics.purchaseLimitModifier));
 
-    this.minorItems = this.table.magicItemsBySpellcasting[Math.min(magicSize + 4, 11)];
-    this.mediumItems = this.table.magicItemsBySpellcasting[Math.min(magicSize + 2, 11)];
-    this.majorItems = this.table.magicItemsBySpellcasting[Math.min(magicSize + 0, 11)];
+    this.minorItems = this.table.magicItemsBySpellcasting[Math.min(magicSize + 4, this.table.magicItemsBySpellcasting.length - 1)];
+    this.mediumItems = this.table.magicItemsBySpellcasting[Math.min(magicSize + 2, this.table.magicItemsBySpellcasting.length - 1)];
+    this.majorItems = this.table.magicItemsBySpellcasting[Math.min(magicSize + 0, this.table.magicItemsBySpellcasting.length - 1)];
   }
 
   fillQualities = () => {
