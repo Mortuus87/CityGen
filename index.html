@@ -6,217 +6,211 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="build/css/style.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
-    integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-  <title>City Generator</title>
+  integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <title>Settlement Generator</title>
 </head>
 <body>
   <header class="header">
   </header>
   <main class="main">
     <div class="container">
-      <form class="">
-        <div class="row">
-
-          <div class="col-12 col-md-4 col-lg-2">
-            <div class="updateBtn-wrapper">
-              <button id="updateBtn" class="btn btn-primary"><i class="fas fa-dice"></i>Reroll</button>
-            </div>
+      <section class="row">
+        <div class="col-12 col-md-4 col-lg-2">
+          <div class="button-wrapper">
+            <button id="updateBtn" class="btn btn-primary">
+              <i class="fas fa-dice"></i>Reroll
+            </button>
           </div>
-
-          <div class="col-6 col-md-4 col-lg-5">
-            <div class="form-group row">
-              <label for="selectSize" class="col-12">Size</label>
-              <div class="col-12">
-                <select name="selectSize" id="selectSize" class="form-control form-control-sm">
-                  <option value="any">Random</option>
-                  <option value="0">Thorp</option>
-                  <option value="1">Hamlet</option>
-                  <option value="2">Village</option>
-                  <option value="3">Small Town</option>
-                  <option value="4">Large Town</option>
-                  <option value="5">Small City</option>
-                  <option value="6">Large City</option>
-                  <option value="7">Metropolis</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-md-4 col-lg-5">
-            <div class="form-group row">
-              <label for="selectAlignment" class="col-12">Alignment</label>
-              <div class="col-12">
-                <select name="selectAlignment" id="selectAlignment" class="form-control form-control-sm">
-                  <option value="any">Random</option>
-                  <option value="LG">Lawful Good</option>
-                  <option value="NG">Neutral Good</option>
-                  <option value="CG">Chaotic Good</option>
-                  <option value="LN">Lawful Neutral</option>
-                  <option value="TN">True Neutral</option>
-                  <option value="CN">Chaotic Neutral</option>
-                  <option value="LE">Lawful Evil</option>
-                  <option value="NE">Neutral Evil</option>
-                  <option value="CE">Chaotic Evil</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-
         </div>
 
-        <div class="row">
-          <div class="col-12">
-            <h2>Settlement</h2>
+        <div class="col-6 col-md-4 col-lg-5">
+          <div class="input-group select-wrapper">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="selectAlignment">Alignment</label>
+            </div>
+            <select name="selectAlignment" id="selectAlignment" class="custom-select">
+              <option value="any">Random</option>
+              <option value="LG">Lawful Good</option>
+              <option value="NG">Neutral Good</option>
+              <option value="CG">Chaotic Good</option>
+              <option value="LN">Lawful Neutral</option>
+              <option value="TN">True Neutral</option>
+              <option value="CN">Chaotic Neutral</option>
+              <option value="LE">Lawful Evil</option>
+              <option value="NE">Neutral Evil</option>
+              <option value="CE">Chaotic Evil</option>
+            </select>
           </div>
+        </div>
 
-          <div class="col-12 col-md-8 settlement-statistics">
-            <div class="row">
+        <div class="col-6 col-md-4 col-lg-5">
+          <div class="input-group select-wrapper">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="selectSize">Size</label>
+            </div>
 
-              <div class="col-12 col-sm-8">
-                <span class="popper">
-                  <b><span id="alignment">?</span></b>
-                </span>
-                <span class="popup">
-                  <p>A settlement’s alignment not only describes the community’s general personality and attitude, but also influences its modifiers.</p>
-                  <ul>
-                    <li>A lawful component to a settlement’s alignment increases its law modifier by 1.</li>
-                    <li>A good component increases its society modifier by 1.</li>
-                    <li>A chaotic component increases its crime modifier by 1.</li>
-                    <li>An evil component increases its corruption modifier by 1.</li>
-                    <li>A neutral component increases its lore modifier by 1 (a truly neutral city gains an increase of 2 to its lore modifier).</li>
-                  </ul>
-                  <p>Alignment never modifies a settlement’s economy modifier.</p>
-                </span>
-                <span> - </span>
-                <span id="type">???</span>
-                <p><b>Population:</b> <span id="population-range"></span></p>
-                <p><b>Government:</b> <span id="short-government"></span></p>
-                <p><b>Qualities:</b> <span id="short-qualities"></span></p>
+            <select name="selectSize" id="selectSize" class="custom-select">
+              <option value="any">Random</option>
+              <option value="0">Thorp</option>
+              <option value="1">Hamlet</option>
+              <option value="2">Village</option>
+              <option value="3">Small Town</option>
+              <option value="4">Large Town</option>
+              <option value="5">Small City</option>
+              <option value="6">Large City</option>
+              <option value="7">Metropolis</option>
+            </select>
+          </div>
+        </div>
+      </section>
 
-                <p><b>Magic and commerce</b></p>
-                <ul class="spells-and-commerce">
-                  <li><b>Spellcasting total: </b><span id="spellcastingTotal"></span></li>
-                  <li><b>Base value total: </b><span id="baseValueTotal"></span></li>
-                  <li><b>Purchase limit total: </b><span id="purchaseLimitTotal"></span></li>
+      <section class="row">
+
+        <div class="col-12">
+          <h2>Settlement</h2>
+        </div>
+
+        <div class="col-12 col-md-8 settlement-statistics">
+          <div class="row">
+            <div class="col-12 col-sm-8">
+              <span class="popper">
+                <b><span id="alignment">?</span></b>
+              </span>
+              <span class="popup">
+                <p>A settlement’s alignment not only describes the community’s general personality and attitude, but also influences its modifiers.</p>
+                <ul>
+                  <li>A lawful component to a settlement’s alignment increases its law modifier by 1.</li>
+                  <li>A good component increases its society modifier by 1.</li>
+                  <li>A chaotic component increases its crime modifier by 1.</li>
+                  <li>An evil component increases its corruption modifier by 1.</li>
+                  <li>A neutral component increases its lore modifier by 1 (a truly neutral city gains an increase of 2 to its lore modifier).</li>
                 </ul>
+                <p>Alignment never modifies a settlement’s economy modifier.</p>
+              </span>
+              <span> - </span>
+              <span id="type">???</span>
+              <p><b>Population:</b> <span id="population-range"></span></p>
+              <p><b>Government:</b> <span id="short-government"></span></p>
+              <p><b>Qualities:</b> <span id="short-qualities"></span></p>
 
-                <p><b>Magic items</b></p>
-                <ul class="magic-items">
-                  <li><b>Minor items: </b><span id="minorItems"></li>
-                  <li><b>Medium items: </b><span id="mediumItems"></li>
-                  <li><b>Major items: </b><span id="majorItems"></li>
-                </ul>
+              <ul class="spells-and-commerce">
+                <li><b>Spellcasting total: </b><span id="spellcastingTotal"></span>*</li>
+                <li><small>* Setting has diminished spellcasting</small></li>
+                <li><b>Base value total: </b><span id="baseValueTotal"></span></li>
+                <li><b>Purchase limit total: </b><span id="purchaseLimitTotal"></span></li>
+              </ul>
+
+
+              <ul class="magic-items">
+                <li><b>Minor items: </b><span id="minorItems"></span></li>
+                <li><b>Medium items: </b><span id="mediumItems"></span></li>
+                <li><b>Major items: </b><span id="majorItems"></span></li>
+              </ul>
+            </div>
+
+            <div class="col-12 col-sm-4">
+              <div class="statistic">
+                <span class="popper"><b>Corruption:</b> <span id="corruption-score">?</span></span>
+                <span class="popup">A settlement’s corruption modifies all Bluff checks made against city officials or guards and all Stealth checks made outside (but not inside buildings or underground).</span>
               </div>
-
-              <div class="col-12 col-sm-4">
-                <div class="statistic">
-                  <span class="popper"><b>Corruption</b> <span id="corruption-score">?</span></span>
-                  <span class="popup">A settlement’s corruption modifies all Bluff checks made against city officials or guards and all Stealth checks made outside (but not inside buildings or underground).</span>
-                </div>
-                <div class="statistic">
-                  <span class="popper"><b>Crime</b> <span id="crime-score">?</span></span>
-                  <span class="popup">The atmosphere generated by a settlement’s crime level applies as a modifier on Sense Motive checks to avoid being bluffed and to Sleight of Hand checks made to pick pockets.</span>
-                </div>
-                <div class="statistic">
-                  <span class="popper"><b>Economy</b> <span id="economy-score">?</span></span>
-                  <span class="popup">A settlement’s economy helps its citizens make money, and thus it applies as a modifier on all Craft, Perform, and Profession checks made to generate income.</span>
-                </div>
-                <div class="statistic">
-                  <span class="popper"><b>Law</b> <span id="law-score">?</span></span>
-                  <span class="popup">A settlement’s law modifier applies on Intimidate checks made to force an opponent to act friendly, Diplomacy checks against government officials, or Diplomacy checks made to call on the city guard.</span>
-                </div>
-                <div class="statistic">
-                  <span class="popper"><b>Lore</b> <span id="lore-score">?</span></span>
-                  <span class="popup">A settlement’s lore modifier applies on Diplomacy checks made to gather information and Knowledge checks made using the city’s resources to do research when using a library.</span>
-                </div>
-                <div class="statistic">
-                  <span class="popper"><b>Society</b> <span id="society-score">?</span></span>
-                  <span class="popup">A settlement’s society modifier applies on all Disguise checks, as well as on Diplomacy checks made to alter the attitude of any non-government official.</span>
-                </div>
-                <div class="statistic">
-                  <span class="popper"><b>Danger</b> <span id="danger-score">?</span></span>
-                  <span class="popup">A settlement’s danger value is a number that gives a general idea of how dangerous it is to live in the settlement. A settlement’s base danger value depends on its type.</span>
-                </div>
+              <div class="statistic">
+                <span class="popper"><b>Crime:</b> <span id="crime-score">?</span></span>
+                <span class="popup">The atmosphere generated by a settlement’s crime level applies as a modifier on Sense Motive checks to avoid being bluffed and to Sleight of Hand checks made to pick pockets.</span>
               </div>
+              <div class="statistic">
+                <span class="popper"><b>Economy:</b> <span id="economy-score">?</span></span>
+                <span class="popup">A settlement’s economy helps its citizens make money, and thus it applies as a modifier on all Craft, Perform, and Profession checks made to generate income.</span>
+              </div>
+              <div class="statistic">
+                <span class="popper"><b>Law:</b> <span id="law-score">?</span></span>
+                <span class="popup">A settlement’s law modifier applies on Intimidate checks made to force an opponent to act friendly, Diplomacy checks against government officials, or Diplomacy checks made to call on the city guard.</span>
+              </div>
+              <div class="statistic">
+                <span class="popper"><b>Lore:</b> <span id="lore-score">?</span></span>
+                <span class="popup">A settlement’s lore modifier applies on Diplomacy checks made to gather information and Knowledge checks made using the city’s resources to do research when using a library.</span>
+              </div>
+              <div class="statistic">
+                <span class="popper"><b>Society:</b> <span id="society-score">?</span></span>
+                <span class="popup">A settlement’s society modifier applies on all Disguise checks, as well as on Diplomacy checks made to alter the attitude of any non-government official.</span>
+              </div>
+              <br>
+              <div class="statistic">
+                <span class="popper"><b>Danger:</b> <span id="danger-score">?</span></span>
+                <span class="popup">A settlement’s danger value is a number that gives a general idea of how dangerous it is to live in the settlement. A settlement’s base danger value depends on its type.</span>
+              </div>
+            </div>
 
-              <div class="col-12">
-                <details>
-                  <summary><b>Settlement notes</b></summary>
-                  <p id="applied-details">
+            <div class="col-12">
+              <details>
+                <summary><b>Settlement summary</b></summary>
+                <p id="applied-details">
                 </details>
-
-                </p>
-              </div>
-
-            </div>
-          </div>
-
-
-          <div class="col-12 col-md-4">
-            <div class="">
-              <h3>
-                Government
-              </h3>
-              <div id="selected-governments">
-                <!-- Government -->
-              </div>
-            </div>
-            <div class="">
-              <h3>
-                Qualities
-              </h3>
-              <div id="selected-qualities">
-                <!-- Qualities -->
-              </div>
+              </p>
             </div>
           </div>
         </div>
 
-        <div class="row">
-          <div class="col-12">
-
-            <nav>
-              <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-governments-tab" data-bs-toggle="tab" data-bs-target="#nav-governments" type="button" role="tab" aria-controls="nav-governments" aria-selected="true">Governments</button>
-                <button class="nav-link" id="nav-qualities-tab" data-bs-toggle="tab" data-bs-target="#nav-qualities" type="button" role="tab" aria-controls="nav-qualities" aria-selected="false">Qualities</button>
-                <button class="nav-link" id="nav-wiki-tab" data-bs-toggle="tab" data-bs-target="#nav-wiki" type="button" role="tab" aria-controls="nav-wiki" aria-selected="false">Wiki template</button>
-              </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-              <div class="tab-pane fade show active" id="nav-governments" role="tabpanel" aria-labelledby="nav-governments-tab">
-                <div class="governments">
-                  <div id="available-governments">
-                    <!-- Generated -->
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="nav-qualities" role="tabpanel" aria-labelledby="nav-qualities-tab">
-                  <div id="available-qualities">
-                    <!-- Generated -->
-                  </div>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="nav-wiki" role="tabpanel" aria-labelledby="nav-wiki-tab">
-                <div class="wiki-template">
-                  <div id="template">
-                    <!-- Generated -->
-                  </div>
-                  <input type="text" name="wiki-template" id="wiki-template" />
-                </div>
-              </div>
+        <div class="col-12 col-md-4">
+          <div class="">
+            <b>
+              Government
+            </b>
+            <div id="selected-governments">
+              <!-- Government -->
+            </div>
+          </div>
+          <div class="">
+            <b>
+              Qualities
+            </b>
+            <div id="selected-qualities">
+              <!-- Qualities -->
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <section class="row">
+        <div class="col-12">
+
+          <h2>Available</h2>
+          <nav class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-governments-tab" data-bs-toggle="tab" data-bs-target="#nav-governments" type="button" role="tab" aria-controls="nav-governments" aria-selected="true">Governments</button>
+            <button class="nav-link" id="nav-qualities-tab" data-bs-toggle="tab" data-bs-target="#nav-qualities" type="button" role="tab" aria-controls="nav-qualities" aria-selected="false">Qualities</button>
+            <button class="nav-link" id="nav-wiki-tab" data-bs-toggle="tab" data-bs-target="#nav-wiki" type="button" role="tab" aria-controls="nav-wiki" aria-selected="false">Wiki template</button>
+          </nav>
+          <div class="tab-content" id="nav-tabContent">
+
+            <div class="tab-pane fade show active" id="nav-governments" role="tabpanel" aria-labelledby="nav-governments-tab">
+              <div class="governments">
+                <div id="available-governments">
+                  <!-- Generated -->
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="nav-qualities" role="tabpanel" aria-labelledby="nav-qualities-tab">
+              <div id="available-qualities">
+                <!-- Generated -->
+              </div>
+            </div>
+
+
+            <div class="tab-pane fade" id="nav-wiki" role="tabpanel" aria-labelledby="nav-wiki-tab">
+              <div class="wiki-template">
+                <textarea class="form-control" type="text" name="wiki-template" id="wiki-template" readonly rows="10"></textarea>
+                <div id="copyToClipboard" class="clipboard icon"><i class="fas fa-copy"></i></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
     </div>
-  </form>
-</div>
-</main>
-<footer class="footer">
-</footer>
+  </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/index.js" type="module" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/index.js" type="module" crossorigin=""></script>
 </body>
 
 </html>

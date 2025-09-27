@@ -127,23 +127,24 @@ export class CardList {
   getCard = (quality, operation) => {
     return `
     <div class="card default" id="${quality.uid}">
-        <div class="row">
-          <div class="col-12">
-            <div class="card-header">
-              <b>${quality.name}</b>
+      <div class="row">
+        <div class="col-12">
+          <div class="card-body">
+            <div class="d-flex">
+              <div class="w-100">
+                <details>
+                  <summary>
+                    <span>${quality.name}</b>
+                  </summary>
+                  <p>${quality.notes}</p>
+                </details>
+                ${this.getTagList(quality)}
+              </div>
               <div class="controls">
                 <a class="quality-control" data-type="${quality.type}" data-uid="${quality.uid}" data-operation="${operation}" title="${operation}">${this.getIcon(operation)}</a>
               </div>
             </div>
           </div>
-          <div class="col-12">
-            <div class="card-body">
-              ${this.getTagList(quality)}
-              <details>
-                <summary>Read more</summary>
-                <p>${quality.notes}</p>
-              </details>
-            </div>
         </div>
       </div>
     </div>`;

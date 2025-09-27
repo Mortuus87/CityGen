@@ -34,6 +34,11 @@ function init() {
 
     update(settlement);
   });
+
+  document.getElementById('copyToClipboard').addEventListener('click', function() {
+    var text = document.querySelector('#wiki-template').innerHTML;
+    navigator.clipboard.writeText(text).then(() => {console.log("copied");})
+  })
 }
 
 init();

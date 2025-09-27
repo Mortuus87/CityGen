@@ -986,7 +986,7 @@
             "notes": ["An individual or group with potent magical power, such as a high priest, an archwizard, or even a magical monster, leads the community."]
         },
         {
-            "name": "Overlord/King/Warlord",
+            "name": "King/Warlord",
             "type": "government",
             "uid": "g-4",
             "corruption": 2,

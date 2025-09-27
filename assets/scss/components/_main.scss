@@ -1,13 +1,6 @@
-.updateBtn-wrapper {
-  display: flex;
-  height: 100%;
-
+.button-wrapper {
   #updateBtn {
     width: 100%;
-    margin-top: auto;
-    padding: 4px 8px;
-    margin-bottom: 1rem;
-    font-size: .875rem;
 
     i {
       margin-right: .5rem;
@@ -15,7 +8,16 @@
   }
 }
 
+.button-wrapper,
+.select-wrapper {
+  margin: .5rem 0;
+}
+
 .popper {
+  >b {
+    border-bottom: 1px dotted $primary;
+  }
+
   &:hover,
   &:focus {
     &+.popup {
@@ -37,22 +39,29 @@
 
 .nav.nav-tabs {
   border: none;
-  .nav-link{
-    background-color: $darker;
+  .nav-link {
+    border-color: #707070;
+    background-color: $dark;
     color:$lightest;
     &.active {
-      background-color: $dark;
-      border: none;
+      background-color: $darker;
+      border-bottom: 0;
     }
   }
+}
+
+.tab-content {
+  padding: .5rem;
+  background-color: $darker;
+  border: 1px solid #707070;
 }
 
 ul.tag-list {
   display: flex;
   flex-wrap: wrap;
   gap: .25rem .25rem;
-  margin-bottom: .5rem;
   padding: 0;
+  margin: .25rem 0 .25rem;
 
   li {
     background-color: $darker;
@@ -83,6 +92,12 @@ ul.tag-list {
   .controls {
     a {
       color: $lightest;
+
+      &:hover,
+      &:active,
+      &:focus {
+        color: $primary;
+      }
     }
 
     a.quality-control {
@@ -95,8 +110,12 @@ ul.tag-list {
 
   details {
     width: 100%;
-    &:not([open]) {
 
+    p:first-of-type {
+      margin-top: 1rem;
+    }
+
+    &:not([open]) {
       &:hover,
       &:active,
       &:focus {
@@ -124,6 +143,15 @@ ul.tag-list {
     &.empty {
       border-style: dashed;
     }
+
+    ul.tag-list {
+      padding: 0;
+      margin: .5rem 0 0;
+
+      li {
+        padding: .125rem .3rem;
+      }
+    }
   }
 
   &.default {
@@ -134,3 +162,23 @@ ul.tag-list {
   }
 }
 
+.wiki-template {
+  position: relative;
+
+  textarea {
+    scrollbar-gutter: 0;
+  }
+
+  .clipboard.icon {
+    position: absolute;
+    top: 0.3rem;
+    right: 1.5rem;
+    color: $darkest;
+
+    &:hover,
+    &:active,
+    &:focus {
+      color: $primary;
+    }
+  }
+}

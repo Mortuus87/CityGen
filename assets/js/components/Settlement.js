@@ -144,11 +144,12 @@ export class Settlement {
 
     }
 
-  getQualities = (mode = Type.QUALITY) => {
-    if (mode === Type.GOVERNMENT) {
-      return this.selectedGovernments;
-    } else if (mode === Type.QUALITY) {
-      return this.selectedQualities;
+  getQualities = (mode) => {
+    switch (mode) {
+      case Type.GOVERNMENT:
+        return this.selectedGovernments;
+      case Type.QUALITY:
+        return this.selectedQualities;
     }
   }
 
@@ -280,7 +281,7 @@ export class Settlement {
       document.querySelector('#' + statName + '-score' ).innerHTML = this.statistics[statName];
     });
 
-    document.querySelector('#spellcastingTotal').innerHTML = this.spellcastingMax + '*';
+    document.querySelector('#spellcastingTotal').innerHTML = this.spellcastingMax;
     document.querySelector('#baseValueTotal').innerHTML = this.baseValueTotal;
     document.querySelector('#purchaseLimitTotal').innerHTML = this.purchaseLimitTotal;
 
@@ -301,7 +302,7 @@ export class Settlement {
   }
 
   renderWiki = () => {
-    const selector = document.querySelector("#template");
+    const textareaSelector = document.querySelector("#wiki-template");
     let qualitiesWikiLinks = '';
 
     for (let i = 0; i < this.selectedQualities.length; i++) {
@@ -312,7 +313,7 @@ export class Settlement {
       }
     }
 
-    selector.innerHTML =
+    textareaSelector.innerHTML =
     `{{City |name=City |alignment=${this.alignment} |type=${this.type} |corruption=${this.statistics.corruption} |crime=${this.statistics.crime} |economy=${this.statistics.economy} |law=${this.statistics.law} |lore=${this.statistics.lore} |society=${this.statistics.society} |qualities=${qualitiesWikiLinks} |danger=${this.danger} |government=${this.getProperties(this.selectedGovernments, 'name').join(', ')} |population=${this.table.populationValues[this.size]} |notable_npcs= |base_val=${this.baseValueTotal} |purchase_limit=${this.purchaseLimitTotal} |spellcasting=${this.spellcastingMax} |minor=${this.minorItems} |medium=${this.mediumItems} |major=${this.majorItems}}}
     <div>
     <p>== Qualities ==</p>
@@ -340,6 +341,7 @@ export class Settlement {
         html += `<br>`;
         html += `<b>Modifier(s):</b> `;
       }
+
       this.table.statistics.forEach(stat => {
         if (quality[stat] != 0) {
           switch (stat) {
@@ -365,10 +367,8 @@ export class Settlement {
       });
 
       html += `</div>`;
-
     });
 
-    // console.log(html);
     return html;
   }
 }
