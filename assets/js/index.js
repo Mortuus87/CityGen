@@ -37,7 +37,9 @@ function init() {
 
   document.getElementById('copyToClipboard').addEventListener('click', function() {
     var text = document.querySelector('#wiki-template').innerHTML;
-    navigator.clipboard.writeText(text).then(() => {console.log("copied");})
+    navigator.clipboard.writeText(text).then(() => {
+      console.log("copied");
+    })
   })
 }
 
@@ -56,14 +58,15 @@ function generate(settlement) {
 
   let selectedAlignment = document.querySelector('#selectAlignment').value;
   if (selectedAlignment === 'any') {
-    selectedAlignment = rollArray(data.alignments)
+    selectedAlignment = rollArray(data.alignments)[0]
   };
 
   /* Setters */
   settlement.setSize(selectedSize);
   settlement.setAlignment(selectedAlignment);
 
-  settlement.fillQualities() // requires size
+  settlement.resetQualities();
+  settlement.fillQualities();
 }
 
 /**
@@ -90,7 +93,6 @@ function update(settlement) {
           settlement.moveQuality(dataset.uid, dataset.type, dataset.operation)
           break;
         case Operation.REROLL:
-          console.log('reroll clicked');
           settlement.moveQuality(dataset.uid, dataset.type, Operation.TO_AVAILABLE);
           settlement.addRandomQuality(dataset.type);
         default:

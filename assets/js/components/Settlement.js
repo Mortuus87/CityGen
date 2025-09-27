@@ -41,7 +41,6 @@ export class Settlement {
   }
 
   reset = () => {
-    this.resetQualities();
     this.resetStatistics();
 
     this.minorItems  = "";
@@ -79,6 +78,7 @@ export class Settlement {
   }
 
   moveQuality = (uid, type, direction) => {
+    //console.log(this.selectedGovernments);
     if (type === Type.GOVERNMENT) {
       if (direction === Operation.TO_SELECTED) {
         // move from available to selected
@@ -113,12 +113,15 @@ export class Settlement {
         });
       }
     }
+    //console.log(this.selectedGovernments);
   }
 
   setQualities = (qualities, mode = Type.QUALITY) => {
     if (mode === Type.GOVERNMENT) {
       qualities.forEach(quality => {
+        console.log(this.selectedGovernments);
         this.moveQuality(quality.uid, Type.GOVERNMENT, Operation.TO_SELECTED);
+        console.log(this.selectedGovernments);
       });
     } else if (mode === Type.QUALITY) {
       qualities.forEach(quality => {
@@ -155,8 +158,6 @@ export class Settlement {
 
   applyQualities = () => {
     // reset to not accumulate statistics
-    this.resetStatistics();
-
     let qualitiesToApply = [...this.selectedGovernments, ...this.selectedQualities];
     qualitiesToApply.forEach(quality => {
       this.table.statistics.forEach(statName => {
@@ -210,9 +211,6 @@ export class Settlement {
   };
 
   applySize = () => {
-    this.type = this.table.sizeLabels[this.size];
-    this.modifierNumber = this.table.modifiers[this.size];
-
     this.table.statistics.forEach(statName => {
       switch (statName) {
         case "corruption":
@@ -221,7 +219,7 @@ export class Settlement {
         case "law":
         case "lore":
         case "society":
-          this.statistics[statName] = this.statistics[statName] + this.modifierNumber;
+          this.statistics[statName] = this.statistics[statName] + this.table.modifiers[this.size];
           break;
       }
     })
@@ -256,6 +254,7 @@ export class Settlement {
 
   // Full processing - reset and apply.
   calculate = () => {
+    this.reset();
     this.applySize();
     this.applyAlignment();
     this.applyQualities();
@@ -272,7 +271,7 @@ export class Settlement {
 
   render = () => {
     document.querySelector('#alignment').innerHTML = this.alignment
-    document.querySelector('#type').innerHTML = this.type;
+    document.querySelector('#type').innerHTML = this.table.sizeLabels[this.size];
     document.querySelector('#population-range').innerHTML = this.table.populationValues[this.size];
     document.querySelector('#short-government').innerHTML = this.getProperties(this.selectedGovernments, 'name').join(', ');
     document.querySelector('#short-qualities').innerHTML = this.getProperties(this.selectedQualities, 'name').join(', ');
@@ -314,7 +313,7 @@ export class Settlement {
     }
 
     textareaSelector.innerHTML =
-    `{{City |name=City |alignment=${this.alignment} |type=${this.type} |corruption=${this.statistics.corruption} |crime=${this.statistics.crime} |economy=${this.statistics.economy} |law=${this.statistics.law} |lore=${this.statistics.lore} |society=${this.statistics.society} |qualities=${qualitiesWikiLinks} |danger=${this.danger} |government=${this.getProperties(this.selectedGovernments, 'name').join(', ')} |population=${this.table.populationValues[this.size]} |notable_npcs= |base_val=${this.baseValueTotal} |purchase_limit=${this.purchaseLimitTotal} |spellcasting=${this.spellcastingMax} |minor=${this.minorItems} |medium=${this.mediumItems} |major=${this.majorItems}}}
+    `{{City |name=City |alignment=${this.alignment} |type=${this.table.sizeLabels[this.size]} |corruption=${this.statistics.corruption} |crime=${this.statistics.crime} |economy=${this.statistics.economy} |law=${this.statistics.law} |lore=${this.statistics.lore} |society=${this.statistics.society} |qualities=${qualitiesWikiLinks} |danger=${this.danger} |government=${this.getProperties(this.selectedGovernments, 'name').join(', ')} |population=${this.table.populationValues[this.size]} |notable_npcs= |base_val=${this.baseValueTotal} |purchase_limit=${this.purchaseLimitTotal} |spellcasting=${this.spellcastingMax} |minor=${this.minorItems} |medium=${this.mediumItems} |major=${this.majorItems}}}
     <div>
     <p>== Qualities ==</p>
     ${this.printModifiers(this.selectedQualities, true)}
