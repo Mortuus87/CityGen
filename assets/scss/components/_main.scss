@@ -1,3 +1,7 @@
+.main {
+  padding-bottom: 2rem;
+}
+
 .button-wrapper {
   #updateBtn {
     width: 100%;
@@ -155,9 +159,8 @@ ul.tag-list {
   }
 
   &.default {
-    .card-header {
-      display: flex;
-      justify-content: space-between;
+    &:last-of-type {
+      margin-bottom: 0;
     }
   }
 }

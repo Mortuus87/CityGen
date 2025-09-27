@@ -9934,6 +9934,10 @@ h3 {
   min-height: 100vh;
 }
 
+.main {
+  padding-bottom: 2rem;
+}
+
 .button-wrapper #updateBtn {
   width: 100%;
 }
@@ -10057,9 +10061,8 @@ ul.tag-list li {
 .card.compact ul.tag-list li {
   padding: 0.125rem 0.3rem;
 }
-.card.default .card-header {
-  display: flex;
-  justify-content: space-between;
+.card.default:last-of-type {
+  margin-bottom: 0;
 }
 
 .wiki-template {
