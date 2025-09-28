@@ -128,8 +128,8 @@ function addSettingLink(setting = false) {
   const host = window.location.host;
   /* return window.location.host; */
   if (setting) {
-    return `<li><a href="http://${host}?setting=${setting}">Use the ${setting} table</a></li>`
+    return `<li><a href="http://${host}/tools/city/?setting=${setting}">Use the ${setting} table</a></li>`
   } else {
-    return `<li><a href="http://${host}">Use the default table</a></li>`
+    return `<li><a href="http://${host}/tools/city/">Use the default table</a></li>`
   }
 }
