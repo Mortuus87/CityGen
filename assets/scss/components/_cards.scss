@@ -1,0 +1,120 @@
+.card {
+  border-radius: 0;
+  background-color: $dark;
+  border: 1px solid $light;
+  box-shadow: 0px 15px -5px rgba(0,0,0,0.5);
+  position: relative;
+  margin-bottom: .5rem;
+
+  .controls {
+    a {
+      color: $lightest;
+
+      &:hover,
+      &:active,
+      &:focus {
+        color: $primary;
+      }
+    }
+
+    a.quality-control {
+      cursor: pointer;
+      i {
+        pointer-events: none;
+      }
+    }
+  }
+
+  details {
+    width: 100%;
+
+    p:first-of-type {
+      margin-top: 1rem;
+    }
+
+    &:not([open]) {
+      &:hover,
+      &:active,
+      &:focus {
+        summary {
+          >span {
+            color: $primary;
+          }
+        }
+      }
+    }
+  }
+
+  &.compact {
+    .card-body {
+      display: flex;
+      position: relative;
+      justify-content: space-between;
+      padding: .25rem .875rem .3rem;
+
+      summary {
+        padding-right: 40px;
+      }
+
+      .controls {
+        display: flex;
+        gap: .2rem .5rem;
+
+        position: absolute;
+        right: 14px;
+      }
+    }
+
+    &.empty {
+      background-color: $darker;
+
+      .card-body>span {
+        color: $light;
+      }
+    }
+
+    ul.tag-list {
+      padding: 0;
+      margin: .5rem 0 0;
+
+      li {
+        padding: .125rem .3rem;
+      }
+    }
+  }
+
+  &.default {
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+
+    summary {
+      padding-right: 16px;
+    }
+
+    .card-body {
+      position: relative;
+
+      .controls {
+        position: absolute;
+        right: 20px;
+      }
+    }
+  }
+}
+
+ul.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem .25rem;
+  padding: 0;
+  margin: .25rem 0 .25rem;
+
+  li {
+    background-color: $darker;
+    font-size: .875rem;
+    list-style: none;
+    padding: .125rem .3rem;
+    border: 1px solid $light;
+  }
+}

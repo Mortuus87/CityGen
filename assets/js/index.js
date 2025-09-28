@@ -6,6 +6,9 @@ import ornJson from '../resources/json/orn.json' with { type: 'json' };
 function init() {
   let json = settlementJson;
 
+  document.querySelector('#footer-link-list').innerHTML += addSettingLink();
+  document.querySelector('#footer-link-list').innerHTML += addSettingLink('orn');
+
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
 
@@ -119,4 +122,14 @@ function update(settlement) {
   });
 
   console.log(settlement);
+}
+
+function addSettingLink(setting = false) {
+  const host = window.location.host;
+  /* return window.location.host; */
+  if (setting) {
+    return `<li><a href="http://${host}?setting=${setting}">Use the ${setting} table</a></li>`
+  } else {
+    return `<li><a href="http://${host}">Use the default table</a></li>`
+  }
 }

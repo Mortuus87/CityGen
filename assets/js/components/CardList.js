@@ -171,9 +171,9 @@ export class CardList {
     return `
     <div class="card compact empty">
       <div class="card-body">
-        <span>Available slot</span>
+        <span>Empty ${type} slot</span>
         <div class="controls">
-          <a class="quality-control" data-type="${type}" data-operation="${Operation.REROLL}" title="${Operation.REROLL}">${this.getIcon(Operation.REROLL)}</a>
+          <a class="quality-control" data-type="${type}" data-operation="${Operation.REROLL}" title="Roll">${this.getIcon(Operation.REROLL)}</a>
         </div>
       </div>
     </div>`;

@@ -1,0 +1,39 @@
+.nav.nav-tabs {
+  border: none;
+  .nav-link {
+    border-color: #707070;
+    background-color: $dark;
+    color:$lightest;
+    &.active {
+      background-color: $darker;
+      border-bottom: 0;
+    }
+  }
+}
+
+.tab-content {
+  padding: .5rem;
+  background-color: $darker;
+  border: 1px solid #707070;
+}
+
+.wiki-template {
+  position: relative;
+
+  textarea {
+    scrollbar-gutter: 0;
+  }
+
+  .clipboard.icon {
+    position: absolute;
+    top: 0.3rem;
+    right: 1.5rem;
+    color: $darkest;
+
+    &:hover,
+    &:active,
+    &:focus {
+      color: $primary;
+    }
+  }
+}
