@@ -9,6 +9,7 @@
 }
 
 .popper {
+  >span:not(b+span),
   >b {
     border-bottom: 1px dotted $primary;
   }
@@ -23,7 +24,6 @@
       z-index: 1;
       padding: 6px 8px 8px;
       border-radius: 4px;
-      width: 100%;
     }
   }
   &+.popup {
@@ -32,11 +32,6 @@
   }
 }
 
-.settlement-statistics {
-  #short-qualities,
-  .spells-and-commerce,
-  .magic-items {
-    padding: 0;
-    li {list-style: none;}
-  }
+.disadvantages:has(.card.empty)>b {
+  color: $light;
 }

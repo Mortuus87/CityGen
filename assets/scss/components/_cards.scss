@@ -68,8 +68,37 @@
     &.empty {
       background-color: $darker;
 
-      .card-body>span {
+      .card-body {
+        display: flex;
+        position: relative;
+        .controls {
+          display: flex;
+          gap: .2rem .5rem;
+          position: absolute;
+          right: 14px;
+        }
+
+        >span {
+          color: $light;
+          padding-right: 1rem;
+        }
+      }
+
+      &.optional {
+        background-color: transparent;
+        border-style: dotted;
+
         color: $light;
+
+        a {
+          color: $light;
+
+          &:hover,
+          &:active,
+          &:focus {
+            color: $primary;
+          }
+        }
       }
     }
 

@@ -112,8 +112,8 @@ function update(settlement) {
           settlement.moveQuality(dataset.uid, dataset.type, dataset.operation)
           break;
         case Operation.REROLL:
-          settlement.moveQuality(dataset.uid, dataset.type, Operation.TO_AVAILABLE);
           settlement.addRandomQuality(dataset.type);
+          settlement.moveQuality(dataset.uid, dataset.type, Operation.TO_AVAILABLE);
         default:
           break;
       }

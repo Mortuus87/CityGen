@@ -28,6 +28,16 @@ export class CardList {
     document.querySelector("#available-qualities").innerHTML = html;
   }
 
+  printAvailableDisadvantages = () => {
+    let html = '';
+    let qualities = this.sortByName(this.settlement.availableDisadvantages);
+    qualities.forEach((quality) => {
+      html += this.getCard(quality, Operation.TO_SELECTED);
+    });
+
+    document.querySelector("#available-disadvantages").innerHTML = html;
+  }
+
   printSelectedGovernments = () => {
     let html = '';
     let governments = this.sortByName(this.settlement.selectedGovernments);
@@ -58,6 +68,22 @@ export class CardList {
     }
 
     document.querySelector("#selected-qualities").innerHTML = html;
+  }
+
+  printSelectedDisadvantages = () => {
+    let html = '';
+    let qualities = this.sortByName(this.settlement.selectedDisadvantages);
+    qualities.forEach((quality) => {
+      html += this.getCompactCard(quality, Operation.TO_AVAILABLE);
+    });
+
+      let emptyCount = 1 - this.settlement.selectedDisadvantages.length
+
+    for (let index = 0; index < emptyCount; index++) {
+      html += this.getEmptyCompactCard(Type.DISADVANTAGE, 'optional');
+    }
+
+    document.querySelector("#selected-disadvantages").innerHTML = html;
   }
 
   sortByName = (array) => {
@@ -121,7 +147,7 @@ export class CardList {
 
   getTagList = (quality) => {
     const tags = this.getStatistics(quality);
-    return tags.length ? `<ul class="tag-list"><li>${tags.join('</li><li>')}</li></ul>` : ``;
+    return tags.length ? `<ul class="tag-list"><li>${tags.join('</li><li>')}</li></ul>` : `<ul class="tag-list"><li>see text</li></ul>`;
   }
 
   getCard = (quality, operation) => {
@@ -167,11 +193,11 @@ export class CardList {
     </div>`;
   }
 
-  getEmptyCompactCard = (type) => {
+  getEmptyCompactCard = (type, variant = 'default') => {
     return `
-    <div class="card compact empty">
+    <div class="card compact empty ${variant}">
       <div class="card-body">
-        <span>Empty ${type} slot</span>
+        <span>${type === 'disadvantage' ? 'Disadvantage(s) [optional]':'Empty ' + type + ' slot'}</span>
         <div class="controls">
           <a class="quality-control" data-type="${type}" data-operation="${Operation.REROLL}" title="Roll">${this.getIcon(Operation.REROLL)}</a>
         </div>

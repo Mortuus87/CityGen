@@ -1031,5 +1031,152 @@
             "purchaseLimitModifier": 0,
             "notes": ["The wealthiest and most influential merchants rule this settlement. Wealth is seen as a sign of good character, ethics and even divine favor. The poor have few, if any rights that the wealthy are bound to respect."]
         }
+    ],
+
+    "disadvantages": [
+        {
+            "name": "Anarchy",
+            "type": "disadvantage",
+            "uid": "d-1",
+            "corruption": 4,
+            "crime": 4,
+            "economy": -4,
+            "law": -6,
+            "lore": 0,
+            "society": -4,
+            "danger": 20,
+            "spellcastingModifier": 0,
+            "baseValueModifier": 0,
+            "purchaseLimitModifier": 0,
+            "notes": [
+                "The settlement has no leaders—this type of community is often short-lived and dangerous.(Replaces settlement’s Government and removes Government adjustments to modifiers; Corruption and Crime +4; Economy and Society –4; Law –6; Danger +20)"
+            ]
+        },
+        {
+            "name": "Cursed",
+            "type": "disadvantage",
+            "uid": "d-2",
+            "corruption": 0,
+            "crime": 0,
+            "economy": 0,
+            "law": 0,
+            "lore": 0,
+            "society": 0,
+            "danger": 0,
+            "spellcastingModifier": 0,
+            "baseValueModifier": 0,
+            "purchaseLimitModifier": 0,
+            "notes": [
+                "Some form of curse afflicts the city. Its citizens might be prone to violence or suffer ill luck, or they could be plagued by an infestation of pests. (Choose one modifier and reduce its value by 4)"
+            ]
+        },
+        {
+            "name": "Heavily Taxed",
+            "type": "disadvantage",
+            "uid": "d-3",
+            "corruption": 0,
+            "crime": 0,
+            "economy": 0,
+            "law": 0,
+            "lore": 0,
+            "society": -2,
+            "danger": 0,
+            "spellcastingModifier": -2,
+            "baseValueModifier": 0.1,
+            "purchaseLimitModifier": 0.5,
+            "notes": [
+                "The settlement is very heavily taxed and has fewer resources available than a settlement of its size normally has. Available magic items as per settlement 1 category smaller."
+            ]
+        },
+        {
+            "name": "Hunted",
+            "type": "disadvantage",
+            "uid": "d-4",
+            "corruption": 0,
+            "crime": 0,
+            "economy": -4,
+            "law": -4,
+            "lore": 0,
+            "society": -4,
+            "danger": 20,
+            "spellcastingModifier": 0,
+            "baseValueModifier": -0.2,
+            "purchaseLimitModifier": 0,
+            "notes": [
+                "A powerful group or monster uses the city as its hunting ground. Citizens live in fear and avoid going out on the streets unless necessary. (Economy, Law, and Society –4; Danger +20; reduce base value by 20%)"
+            ]
+        },
+        {
+            "name": "Impoverished",
+            "type": "disadvantage",
+            "uid": "d-5",
+            "corruption": 1,
+            "crime": 1,
+            "economy": 0,
+            "law": 0,
+            "lore": 0,
+            "society": 0,
+            "danger": 0,
+            "spellcastingModifier": 0,
+            "baseValueModifier": -0.5,
+            "purchaseLimitModifier": -0.5,
+            "notes": [
+                "Because of any number of factors, the settlement is destitute. Poverty, famine, and disease run rampant. Halve magic item availability"
+            ]
+        },
+        {
+            "name": "Martial Law",
+            "type": "disadvantage",
+            "uid": "d-6",
+            "corruption": -4,
+            "crime": -2,
+            "economy": -4,
+            "law": 2,
+            "lore": 0,
+            "society": 0,
+            "danger": 10,
+            "spellcastingModifier": 0,
+            "baseValueModifier": -0.5,
+            "purchaseLimitModifier": -0.5,
+            "notes": [
+                "As long as the settlement remains under martial law, a 9:00 PM to 6:00 AM curfew is in effect. Additionally, as long as the citizens must follow the edicts and proclamations, the city stifles and suffers. Halve all values for marketplace entries"
+            ]
+        },
+        {
+            "name": "Oppressed",
+            "type": "disadvantage",
+            "uid": "d-7",
+            "corruption": 0,
+            "crime": 0,
+            "economy": 0,
+            "law": 0,
+            "lore": -6,
+            "society": -6,
+            "danger": 0,
+            "spellcastingModifier": 0,
+            "baseValueModifier": 0,
+            "purchaseLimitModifier": 0,
+            "notes": [
+                "The leadership of this settlement retains oppressive control."
+            ]
+        },
+        {
+            "name": "Plagued",
+            "type": "disadvantage",
+            "uid": "d-8",
+            "corruption": -2,
+            "crime": -2,
+            "economy": -2,
+            "law": -2,
+            "lore": -2,
+            "society": -2,
+            "danger": -2,
+            "spellcastingModifier": 0,
+            "baseValueModifier": -0.2,
+            "purchaseLimitModifier": 0,
+            "notes": [
+                "The community is suffering from a protracted contagion or malady. Select A communicable disease—there’s a 5% chance each day that a character is exposed to the disease and must make a save to avoid contracting the illness"
+            ]
+        }
     ]
 }

@@ -72,7 +72,7 @@
 
         <div class="col-12 col-md-8 settlement-statistics">
           <div class="row">
-            <div class="col-12 col-sm-8">
+            <div class="col-12 col-sm-7">
               <span class="popper">
                 <b><span id="alignment">?</span></b>
               </span>
@@ -93,21 +93,28 @@
               <p><b>Government:</b> <span id="short-government"></span></p>
               <p><b>Qualities:</b> <span id="short-qualities"></span></p>
 
-              <ul class="spells-and-commerce">
-                <li><b>Spellcasting total: </b><span id="spellcastingTotal"></span></li>
-                <li><b>Base value total: </b><span id="baseValueTotal"></span></li>
-                <li><b>Purchase limit total: </b><span id="purchaseLimitTotal"></span></li>
-              </ul>
+              <p class="spells-and-commerce">
+                <span class="popper"><b>Spellcasting total: </b><span id="spellcastingTotal"></span></span>
+                <span class="popup">Usually equal to size with any modifications from government, qualities and disadvantages. Maximum 8th level.</span>
+                <br>
+                <span class="popper"><b>Base value total: </b><span id="baseValueTotal"></span> gp</span>
+                <span class="popup">There is a 75% chance that any item of this value or lower can be found for sale in the settlement with little effort. If an item is not available, a new check to determine if the item has become available can be made in 1 week.</span>
+                <br>
+                <span class="popper"><b>Purchase limit total: </b><span id="purchaseLimitTotal"></span> gp</span>
+                <span class="popup">A settlement’s purchase limit is the most money a shop in the settlement can spend to purchase any single item from a character.<br>If the character wish to sell an item worth more than a settlement’s purchase limit, they’ll either need to settle for a lower price, travel to A larger city, or search for a specific buyer in the city with deeper pockets.</span>
+              </p>
 
+              <p class="magic-items">
+                <span><b>Minor: </b><span id="minorItems"></span></span><br>
+                <span><b>Medium: </b><span id="mediumItems"></span></span><br>
+                <span><b>Major: </b><span id="majorItems"></span></span><br>
 
-              <ul class="magic-items">
-                <li><b>Minor items: </b><span id="minorItems"></span></li>
-                <li><b>Medium items: </b><span id="mediumItems"></span></li>
-                <li><b>Major items: </b><span id="majorItems"></span></li>
-              </ul>
+                <small class="popper"><span>About magic items</span></small>
+                <span class="popup">Follows the pattern: <br>-, 1d4, 1d6, 2d4, 3d4, 3d4, 4d4, 4d4, (*)<br>Adjust accordingly if the settlement receives an increase or decrease in magic item available. In a Metropolis there are no defined limit to the amount of Minor items, but Medium and Major cap out at 4d4 items before modifiers.</span>
+              </p>
             </div>
 
-            <div class="col-12 col-sm-4">
+            <div class="col-12 col-sm-5">
               <div class="statistic">
                 <span class="popper"><b>Corruption:</b> <span id="corruption-score">?</span></span>
                 <span class="popup">A settlement’s corruption modifies all Bluff checks made against city officials or guards and all Stealth checks made outside (but not inside buildings or underground).</span>
@@ -150,16 +157,22 @@
         </div>
 
         <div class="col-12 col-md-4">
-          <div class="">
+          <div class="governments">
             <b>Government</b> <span id="governmentCount"></span>
 
             <div id="selected-governments">
               <!-- Government -->
             </div>
           </div>
-          <div class="">
+          <div class="qualities">
             <b>Qualities</b> <span id="qualityCount"></span>
             <div id="selected-qualities">
+              <!-- Qualities -->
+            </div>
+          </div>
+          <div class="disadvantages">
+            <b>Disadvantages</b>
+            <div id="selected-disadvantages">
               <!-- Qualities -->
             </div>
           </div>
@@ -172,7 +185,11 @@
           <h2>Modifiers</h2>
           <nav class="nav nav-tabs" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-governments-tab" data-bs-toggle="tab" data-bs-target="#nav-governments" type="button" role="tab" aria-controls="nav-governments" aria-selected="true">Governments</button>
+
             <button class="nav-link" id="nav-qualities-tab" data-bs-toggle="tab" data-bs-target="#nav-qualities" type="button" role="tab" aria-controls="nav-qualities" aria-selected="false">Qualities</button>
+
+            <button class="nav-link" id="nav-disadvantages-tab" data-bs-toggle="tab" data-bs-target="#nav-disadvantages" type="button" role="tab" aria-controls="nav-disadvantages" aria-selected="false">Disadvantages</button>
+
             <button class="nav-link" id="nav-wiki-tab" data-bs-toggle="tab" data-bs-target="#nav-wiki" type="button" role="tab" aria-controls="nav-wiki" aria-selected="false">Wiki template</button>
           </nav>
           <div class="tab-content" id="nav-tabContent">
@@ -191,6 +208,11 @@
               </div>
             </div>
 
+            <div class="tab-pane fade" id="nav-disadvantages" role="tabpanel" aria-labelledby="nav-disadvantages-tab">
+              <div id="available-disadvantages">
+                <!-- Generated -->
+              </div>
+            </div>
 
             <div class="tab-pane fade" id="nav-wiki" role="tabpanel" aria-labelledby="nav-wiki-tab">
               <div class="wiki-template">
@@ -216,13 +238,13 @@
         <div class="col-12 col-md-6">
           <ul id="footer-link-list">
             <li>
-              <a href="http://moruus.no/wiki">Back to the wiki</a>
+              <a href="http://mortuus.no/wiki">Back to the wiki</a>
             </li>
           </ul>
         </div>
 
         <div class="col-12 col-md-6">
-
+          <p>Too be implemented: Calculation of applied disadvantages</p>
         </div>
 
       </div>

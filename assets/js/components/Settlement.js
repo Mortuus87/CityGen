@@ -4,6 +4,7 @@ import { CardList } from "./CardList.js";
 export const Type = {
   GOVERNMENT: 'government',
   QUALITY: 'quality',
+  DISADVANTAGE: 'disadvantage',
 }
 
 export const Operation = {
@@ -13,8 +14,8 @@ export const Operation = {
 }
 
 /**
- * TODO: extract any rendering classes into a separate module. This class should only handle internal logic, not presentation.
- */
+* TODO: extract any rendering classes into a separate module. This class should only handle internal logic, not presentation.
+*/
 export class Settlement {
   constructor(tables) {
     this.table = tables;
@@ -24,11 +25,14 @@ export class Settlement {
     this.statistics = []; // must be set for sub-arrays to have a home.
     this.resetStatistics();
 
+    this.availableGovernments    = this.table.governments;
+    this.selectedGovernments     = [];
+
     this.availableQualities   = this.table.qualities;
     this.selectedQualities    = [];
 
-    this.availableGovernments    = this.table.governments;
-    this.selectedGovernments     = [];
+    this.availableDisadvantages    = this.table.disadvantages;
+    this.selectedDisadvantages     = [];
 
 
     this.minorItems  = "";
@@ -57,11 +61,14 @@ export class Settlement {
   }
 
   resetQualities = () => {
+    this.availableGovernments = [...this.availableGovernments, ...this.selectedGovernments];
+    this.selectedGovernments  = [];
+
     this.availableQualities   = [...this.availableQualities, ...this.selectedQualities];
     this.selectedQualities    = [];
 
-    this.availableGovernments = [...this.availableGovernments, ...this.selectedGovernments];
-    this.selectedGovernments  = [];
+    this.availableDisadvantages = [...this.availableDisadvantages, ...this.selectedDisadvantages];
+    this.selectedDisadvantages  = [];
   }
 
   resetStatistics = () => {
@@ -79,7 +86,8 @@ export class Settlement {
 
   moveQuality = (uid, type, direction) => {
     //console.log(this.selectedGovernments);
-    if (type === Type.GOVERNMENT) {
+    switch (type) {
+      case Type.GOVERNMENT:
       if (direction === Operation.TO_SELECTED) {
         // move from available to selected
         this.availableGovernments.forEach((government, i) => {
@@ -95,8 +103,8 @@ export class Settlement {
           }
         });
       }
-    } else if (type === Type.QUALITY) {
-      // assume quality
+      break;
+      case Type.QUALITY:
       if (direction === Operation.TO_SELECTED) {
         // move from available to selected
         this.availableQualities.forEach((quality, i) => {
@@ -112,19 +120,44 @@ export class Settlement {
           }
         });
       }
+      break;
+      case Type.DISADVANTAGE:
+      if (direction === Operation.TO_SELECTED) {
+        // move from available to selected
+        this.availableDisadvantages.forEach((quality, i) => {
+          if (quality.uid === uid) {
+            this.selectedDisadvantages.push(this.availableDisadvantages.splice(i, 1)[0])
+          }
+        });
+      } else {
+        // assume move from selected to available
+        this.selectedDisadvantages.forEach((quality, i) => {
+          if (quality.uid === uid) {
+            this.availableDisadvantages.push(this.selectedDisadvantages.splice(i, 1)[0])
+          }
+        });
+      }
+      break;
     }
-    //console.log(this.selectedGovernments);
   }
 
-  setQualities = (qualities, mode = Type.QUALITY) => {
-    if (mode === Type.GOVERNMENT) {
+  setQualities = (qualities, type) => {
+    switch (type) {
+      case Type.GOVERNMENT:
       qualities.forEach(quality => {
         this.moveQuality(quality.uid, Type.GOVERNMENT, Operation.TO_SELECTED);
       });
-    } else if (mode === Type.QUALITY) {
+      break;
+      case Type.QUALITY:
       qualities.forEach(quality => {
         this.moveQuality(quality.uid, Type.QUALITY, Operation.TO_SELECTED);
       });
+      break;
+      case Type.DISADVANTAGE:
+      qualities.forEach(quality => {
+        this.moveQuality(quality.uid, Type.DISADVANTAGE, Operation.TO_SELECTED);
+      });
+      break;
     }
   }
 
@@ -132,31 +165,36 @@ export class Settlement {
     let qualities = [];
     switch (type) {
       case Type.GOVERNMENT:
-        qualities = roll(this.availableGovernments, 1)
-        break;
+      qualities = roll(this.availableGovernments, 1)
+      break;
       case Type.QUALITY:
-        qualities = roll(this.availableQualities, 1)
-        break;
-      }
-
-      qualities.forEach(quality => {
-        this.moveQuality(quality.uid, type, Operation.TO_SELECTED)
-      });
-
+      qualities = roll(this.availableQualities, 1)
+      break;
+      case Type.DISADVANTAGE:
+      qualities = roll(this.availableDisadvantages, 1)
+      break;
     }
+
+    qualities.forEach(quality => {
+      this.moveQuality(quality.uid, type, Operation.TO_SELECTED)
+    });
+
+  }
 
   getQualities = (mode) => {
     switch (mode) {
       case Type.GOVERNMENT:
-        return this.selectedGovernments;
+      return this.selectedGovernments;
       case Type.QUALITY:
-        return this.selectedQualities;
+      return this.selectedQualities;
+      case Type.DISADVANTAGE:
+      return this.selectedDisadvantages;
     }
   }
 
   applyQualities = () => {
     // reset to not accumulate statistics
-    let qualitiesToApply = [...this.selectedGovernments, ...this.selectedQualities];
+    let qualitiesToApply = [...this.selectedGovernments, ...this.selectedQualities, ...this.selectedDisadvantages];
     qualitiesToApply.forEach(quality => {
       this.table.statistics.forEach(statName => {
         switch (statName) {
@@ -170,8 +208,8 @@ export class Settlement {
           case "spellcastingModifier":
           case "baseValueModifier":
           case "purchaseLimitModifier":
-            this.statistics[statName] += parseFloat(quality[statName]);
-            break;
+          this.statistics[statName] += parseFloat(quality[statName]);
+          break;
         }
       })
     });
@@ -217,8 +255,8 @@ export class Settlement {
         case "law":
         case "lore":
         case "society":
-          this.statistics[statName] = this.statistics[statName] + this.table.modifiers[this.size];
-          break;
+        this.statistics[statName] = this.statistics[statName] + this.table.modifiers[this.size];
+        break;
       }
     })
 
@@ -248,6 +286,7 @@ export class Settlement {
   fillQualities = () => {
     this.setQualities(roll(this.availableQualities, this.table.qualitiesValues[this.size] - this.selectedQualities.length), Type.QUALITY);
     this.setQualities(roll(this.availableGovernments, 1 - this.selectedGovernments.length), Type.GOVERNMENT);
+    //this.setQualities(roll(this.availableDisadvantages, 1 - this.selectedDisadvantages.length), Type.DISADVANTAGE);
   }
 
   // Full processing - reset and apply.
@@ -286,7 +325,10 @@ export class Settlement {
     document.querySelector('#mediumItems').innerHTML = this.mediumItems;
     document.querySelector('#majorItems').innerHTML = this.majorItems;
 
-    document.querySelector('#applied-details').innerHTML = this.getProperties(this.selectedGovernments, 'notes').join('</p><p>') + '</p><p>' + this.getProperties(this.selectedQualities, 'notes').join('</p><p>');
+    document.querySelector('#applied-details').innerHTML =
+    this.getProperties(this.selectedGovernments, 'notes').join('</p><p>') + '</p><p>' +
+    this.getProperties(this.selectedQualities, 'notes').join('</p><p>') + '</p><p>' +
+    this.getProperties(this.selectedDisadvantages, 'notes').join('</p><p>');
 
     let cardList = new CardList(this);
     cardList.printSelectedGovernments();
@@ -307,8 +349,10 @@ export class Settlement {
       qualityCount.classList.remove('error');
     }
 
+    cardList.printSelectedDisadvantages();
     cardList.printAvailableGovernments();
     cardList.printAvailableQualities();
+    cardList.printAvailableDisadvantages();
 
     this.renderWiki();
   }

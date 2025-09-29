@@ -10002,8 +10002,30 @@ span.error {
 .card.compact.empty {
   background-color: #2e2e2e;
 }
+.card.compact.empty .card-body {
+  display: flex;
+  position: relative;
+}
+.card.compact.empty .card-body .controls {
+  display: flex;
+  gap: 0.2rem 0.5rem;
+  position: absolute;
+  right: 14px;
+}
 .card.compact.empty .card-body > span {
   color: #707070;
+  padding-right: 1rem;
+}
+.card.compact.empty.optional {
+  background-color: transparent;
+  border-style: dotted;
+  color: #707070;
+}
+.card.compact.empty.optional a {
+  color: #707070;
+}
+.card.compact.empty.optional a:hover, .card.compact.empty.optional a:active, .card.compact.empty.optional a:focus {
+  color: #f5ad28;
 }
 .card.compact ul.tag-list {
   padding: 0;
@@ -10048,6 +10070,7 @@ ul.tag-list li {
   margin-right: 0.5rem;
 }
 
+.popper > span:not(b + span),
 .popper > b {
   border-bottom: 1px dotted #f5ad28;
 }
@@ -10059,26 +10082,23 @@ ul.tag-list li {
   z-index: 1;
   padding: 6px 8px 8px;
   border-radius: 4px;
-  width: 100%;
 }
 .popper + .popup {
   display: none;
   margin-right: 20px;
 }
 
-.settlement-statistics #short-qualities,
-.settlement-statistics .spells-and-commerce,
-.settlement-statistics .magic-items {
-  padding: 0;
-}
-.settlement-statistics #short-qualities li,
-.settlement-statistics .spells-and-commerce li,
-.settlement-statistics .magic-items li {
-  list-style: none;
+.disadvantages:has(.card.empty) > b {
+  color: #707070;
 }
 
 .nav.nav-tabs {
   border: none;
+  column-gap: 0.25rem;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
 }
 .nav.nav-tabs .nav-link {
   border-color: #707070;
