@@ -1141,7 +1141,7 @@
             "baseValueModifier": 0,
             "purchaseLimitModifier": 0,
             "notes": [
-                "The settlement has no leaders—this type of community is often short-lived and dangerous.(Replaces settlement’s Government and removes Government adjustments to modifiers; Corruption and Crime +4; Economy and Society –4; Law –6; Danger +20)"
+                "The settlement has no leaders—this type of community is often short-lived and dangerous. (This Disadvantage replaces the Government of the settlement)"
             ]
         },
         {
