@@ -20,9 +20,21 @@
 }
 
 .tab-content {
-  padding: .5rem;
+  padding: .25rem;
   background-color: $darker;
   border: 1px solid #707070;
+
+  #available-governments,
+  #available-qualities,
+  #available-disadvantages {
+    &.row {
+      margin: 0;
+      >.col {
+        padding: .25rem;
+      }
+    }
+  }
+
 }
 
 .wiki-template {
