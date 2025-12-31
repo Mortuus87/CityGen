@@ -369,29 +369,27 @@ export class Settlement {
       }
     }
 
-    textareaSelector.innerHTML =
-    `{{City |name={{PAGENAME}} |alignment=${this.alignment} |type=${this.table.sizeLabels[this.size]} |corruption=${this.statistics.corruption} |crime=${this.statistics.crime} |economy=${this.statistics.economy} |law=${this.statistics.law} |lore=${this.statistics.lore} |society=${this.statistics.society} |qualities=${qualitiesWikiLinks} |danger=${this.danger} |government=${this.getProperties(this.selectedGovernments, 'name').join(', ')} |population=${this.table.populationValues[this.size]} |notable_npcs= |base_val=${this.baseValueTotal} |purchase_limit=${this.purchaseLimitTotal} |spellcasting=${this.spellcastingMax} |minor=${this.minorItems} |medium=${this.mediumItems} |major=${this.majorItems}}}
-    <div>
-    <p>== Qualities ==</p>
-    ${this.printModifiers(this.selectedQualities, true)}
-    </div>
-    <div>
-    <p>== Government ==</p>
-    ${this.printModifiers(this.selectedGovernments, true)}
-    </div>`;
+    let html = '';
+    html += `{{City |name={{PAGENAME}} |alignment=${this.alignment} |type=${this.table.sizeLabels[this.size]} |corruption=${this.statistics.corruption} |crime=${this.statistics.crime} |economy=${this.statistics.economy} |law=${this.statistics.law} |lore=${this.statistics.lore} |society=${this.statistics.society} |qualities=${qualitiesWikiLinks} |danger=${this.danger} |government=${this.getProperties(this.selectedGovernments, 'name').join(', ')} |population=${this.table.populationValues[this.size]} |notable_npcs= |base_val=${this.baseValueTotal} |purchase_limit=${this.purchaseLimitTotal} |spellcasting=${this.spellcastingMax} |minor=${this.minorItems} |medium=${this.mediumItems} |major=${this.majorItems}}}\n`;
+    html += `== Government ==\n`;
+    html += `${this.printModifiers(this.selectedGovernments, true)}\n`;
+    html += `== Qualities ==\n`;
+    html += `${this.printModifiers(this.selectedQualities, true)}\n`;
+    
+    textareaSelector.innerHTML = html;
   }
 
-  printModifiers = (qualities, wikiMode = true) => {
+  printModifiers = (modifiers, wikiMode = true) => {
     let html = '';
 
-    qualities.forEach(quality => {
-      html += `<div class="quality">`;
+    modifiers.forEach(quality => {
       if (wikiMode) {
-        html += `=== ${quality.name} ===<br>`;
-        html += `${quality.notes}<br>`;
-        html += `<br>`;
-        html += `'''Modifier(s):''' `;
+        html += `=== ${quality.name} ===\n`;
+        html += `${quality.notes}\n`;
+        html += `\n`;
+        html += `'''Modifier(s):''' `; // immediately followed by the modifier values
       } else {
+        html += `<div class="quality">`; // closed after statistics
         html += `<b>${quality.name}</b>`;
         html += `<br>${quality.notes}`;
         html += `<br>`;
@@ -421,8 +419,11 @@ export class Settlement {
           }
         }
       });
-
-      html += `</div>`;
+      if (wikiMode) {
+        html += `\n`; // nothing to close for wiki mode
+      } else {
+        html += `</div>`;
+      }
     });
 
     return html;
